@@ -1,6 +1,6 @@
 The Atom Class
 ==============
 
-.. automodule:: dalton
+.. automodule:: dalton.api
    :members:
    :special-members: __init__

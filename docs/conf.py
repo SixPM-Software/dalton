@@ -15,7 +15,7 @@ import sys
 
 import sphinx_rtd_theme
 
-sys.path.insert(0, os.path.abspath("../dalton"))
+sys.path.insert(0, os.path.abspath(".."))
 # for x in os.walk('./dalton'):
 #   sys.path.insert(0, x[0])
 

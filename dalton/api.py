@@ -2,8 +2,15 @@ import json
 
 import requests
 
-from .atomic_classes import Asset, Schema, Template, Collection, Transfer, AtomicBaseClass
-from .atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
+from .tools.atomic_classes import (
+    Asset,
+    Schema,
+    Template,
+    Collection,
+    Transfer,
+    AtomicBaseClass,
+)
+from .tools.atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
 
 
 class Atom:
