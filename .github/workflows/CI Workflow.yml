@@ -83,6 +83,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry
         poetry install
-    - Name: build package
+    - name: build package
       run: |
         poetry build
