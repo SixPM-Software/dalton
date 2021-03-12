@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from .atomic_classes import Asset, Schema, Template, Collection, Transfer
+from .atomic_classes import Asset, Schema, Template, Collection, Transfer, AtomicBaseClass
 from .atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
 
 
