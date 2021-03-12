@@ -2,15 +2,15 @@ import json
 
 import requests
 
-from atomic_classes import *
-from atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
+from atomic.atomic_classes import *
+from atomic.atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
 
 
 class Atom:
     def __init__(self, endpoint="https://wax.api.atomicassets.io/atomicassets/v1/"):
         self.endpoint = endpoint
 
-    def _query(self, endpoint: str):
+    def _query(self, endpoint: str,params={}):
         """Internal function to make a query and return data
 
         Args:
@@ -22,7 +22,7 @@ class Atom:
         Raises:
                 RequestFailedError: API success returned with False - likely invalid endpoint
         """
-        data = requests.get(endpoint)
+        data = requests.get(endpoint,params=params)
         data = json.loads(data.content)
         if data["success"]:
             return data["data"]
@@ -77,6 +77,12 @@ class Atom:
                 del fields[key]
         if not len(fields):
             raise NoFiltersError
-        q = "&".join([key + "=" + val for key, val in fields.items()])
-        data = self._query(self.endpoint + "assets?limit=%s&" % limit + q)
-        return [Asset(nft) for nft in data]
+        fields["limit"] = limit
+
+        
+        data = self._query(self.endpoint+"assets",params=fields)
+        built_data = [Asset(nft) for nft in data]
+        return built_data
+
+        def get_asset_history(self,item):
+            pass
