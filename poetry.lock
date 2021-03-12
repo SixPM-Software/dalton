@@ -410,6 +410,14 @@ lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
 
 [[package]]
+name = "sphinxcontrib-fulltoc"
+version = "1.2.0"
+description = "Include a full table of contents in your Sphinx HTML sidebar"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "sphinxcontrib-htmlhelp"
 version = "1.0.3"
 description = "sphinxcontrib-htmlhelp is a sphinx extension which renders HTML help files"
@@ -512,7 +520,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "99f7be08f6a31395897a6bd08cd1bfc86bf5064a4761ed6046d36c9f0b079b75"
+content-hash = "42f66271e8ca0698d9d9b12492015a9e07c429aba5d5502fb5b50e90a4885ea9"
 
 [metadata.files]
 alabaster = [
@@ -772,6 +780,9 @@ sphinxcontrib-applehelp = [
 sphinxcontrib-devhelp = [
     {file = "sphinxcontrib-devhelp-1.0.2.tar.gz", hash = "sha256:ff7f1afa7b9642e7060379360a67e9c41e8f3121f2ce9164266f61b9f4b338e4"},
     {file = "sphinxcontrib_devhelp-1.0.2-py2.py3-none-any.whl", hash = "sha256:8165223f9a335cc1af7ffe1ed31d2871f325254c0423bc0c4c7cd1c1e4734a2e"},
+]
+sphinxcontrib-fulltoc = [
+    {file = "sphinxcontrib-fulltoc-1.2.0.tar.gz", hash = "sha256:c845d62fc467f3135d4543e9f10e13ef91852683bd1c90fd19d07f9d36757cd9"},
 ]
 sphinxcontrib-htmlhelp = [
     {file = "sphinxcontrib-htmlhelp-1.0.3.tar.gz", hash = "sha256:e8f5bb7e31b2dbb25b9cc435c8ab7a79787ebf7f906155729338f3156d93659b"},

@@ -5,9 +5,8 @@ Welcome to Dalton's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   usage/Dalton
-   usage/Atomic Classes
-   usage/Atomic Errors
+   usage/Getting Started
+   API Reference <usage/API>
 
 
 
