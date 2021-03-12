@@ -1,5 +1,5 @@
 from datetime import datetime
-from atomic_errors import NoCollectionImageError
+from .atomic_errors import NoCollectionImageError
 
 
 class AtomicBaseClass:

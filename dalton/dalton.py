@@ -2,8 +2,8 @@ import json
 
 import requests
 
-from atomic_classes import Asset, Schema, Template, Collection, Transfer
-from atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
+from .atomic_classes import Asset, Schema, Template, Collection, Transfer
+from .atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
 
 
 class Atom:
@@ -61,7 +61,14 @@ class Atom:
         data = self._query(self.endpoint + "assets/" + asset_id)
         return Asset(data)
 
-    def get_assets(self, owner:str="", collection:Collection="", schema:Schema="", template:Template="", limit=100):
+    def get_assets(
+        self,
+        owner: str = "",
+        collection: Collection = "",
+        schema: Schema = "",
+        template: Template = "",
+        limit=100,
+    ):
         """Get a list of assets based on critera. Must have at least 1 criteria
 
         Args:
