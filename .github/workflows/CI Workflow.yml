@@ -68,6 +68,3 @@ jobs:
     - name: Attempt to install
       run: |
         pip install --user dalton
-
-  
-      
