@@ -9,6 +9,7 @@ This Python package provides a wrapper providing read-only access to the Atomic 
 
 - [Dalton](#dalton)
   - [Features](#features)
+    - [In development](#in-development)
   - [Installation](#installation)
   - [Examples](#examples)
     - [Creating an Atom object](#creating-an-atom-object)
@@ -22,8 +23,12 @@ This Python package provides a wrapper providing read-only access to the Atomic 
 ## Features
 
 * `Atom` class for accessing Atomic Asset Data
-* Pythonic classes for Atomic Assets, Templates, Schemas, Collections, Transfer events, with support of Offers and Accounts coming soon.
+* Pythonic classes for Atomic Assets, Templates, Schemas, Collections, Transfer events, with 
 * A growing collection of class methods for working with API data.
+
+### In development
+* Support of Offers and Accounts.
+* Price history
 
 Fun fact: This package is named after John Dalton, a pioneer of Atomic Theory.
 
