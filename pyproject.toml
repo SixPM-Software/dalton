@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "daltonapi"
-version = "0.1.1-alpha.1"
+version = "0.1.1-alpha.2"
 description = "Python wrapper for the AtomicAssets API"
 authors = ["stuckatsixpm <stuckat6pm@gmail.com>"]
 license = "MIT"
