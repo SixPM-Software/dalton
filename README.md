@@ -73,7 +73,7 @@ To get assets based on some criteria, you can use `Atom.get_assets`, which will 
 Full documentation is being assembled at [Read the Docs](https://dalton.readthedocs.io/en/latest/).
 
 ## Contributing
-See [Contributing](contributing.md).
+See [Contributing](CONTRIBUTING.md).
 
 Alternatively, if you would like to sponsor me, consider donating some WAX to the address `daltonpython`.
 ![https://i.imgur.com/rWbgGW3.png](https://i.imgur.com/rWbgGW3.png)
