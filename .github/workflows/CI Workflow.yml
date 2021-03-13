@@ -88,5 +88,5 @@ jobs:
         poetry build
     - name: Test install
       run: |
-        pip uninstall -y
+        pip uninstall -y dalton
         pip install .
