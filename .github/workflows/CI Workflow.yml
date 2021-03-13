@@ -79,7 +79,7 @@ jobs:
         pip uninstall -y dalton
         pip install .
 
-  release to PyPI:
+  release-to-PyPI:
     runs-on: ubuntu-latest
     needs: [install, build]
     steps:

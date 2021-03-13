@@ -75,7 +75,7 @@ Full documentation is being assembled at [Read the Docs](https://dalton.readthed
 ## Contributing
 See [Contributing](contributing.md).
 
-Alternatively, if you would like to sponsor me, consider donating some WAX with the address `daltonpython`.
+Alternatively, if you would like to sponsor me, consider donating some WAX to the address `daltonpython`.
 ![https://i.imgur.com/rWbgGW3.png](https://i.imgur.com/rWbgGW3.png)
 
 
