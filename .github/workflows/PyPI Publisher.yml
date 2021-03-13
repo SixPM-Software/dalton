@@ -9,7 +9,6 @@ on:
 jobs:
   release-to-PyPI:
     runs-on: ubuntu-latest
-    needs: [install, build]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
