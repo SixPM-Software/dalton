@@ -29,7 +29,10 @@ Fun fact: This package is named after John Dalton, a pioneer of Atomic Theory.
 
 ## Installation
 
-TBC
+The recommended method of installation is through PyPI and pip
+```
+python -m pip install daltonapi
+```
 
 ## Examples
 
