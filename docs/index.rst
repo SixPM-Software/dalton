@@ -9,6 +9,7 @@ This Python package provides a wrapper providing read-only access to the Atomic 
    :maxdepth: 2
    :caption: Contents:
 
+   usage/Installation
    usage/Getting Started
    API Reference <usage/API>
 
