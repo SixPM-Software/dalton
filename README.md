@@ -1,6 +1,6 @@
 # Dalton
 
-![GitHub](https://img.shields.io/github/license/stuckatsixpm/dalton) [![CI Workflow](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml/badge.svg)](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml) [![Documentation Status](https://readthedocs.org/projects/dalton/badge/?version=latest)](https://dalton.readthedocs.io/en/latest/?badge=latest)
+![PyPI](https://img.shields.io/pypi/v/daltonapi) ![GitHub](https://img.shields.io/github/license/stuckatsixpm/dalton) [![CI Workflow](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml/badge.svg)](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml) [![Documentation Status](https://readthedocs.org/projects/dalton/badge/?version=latest)](https://dalton.readthedocs.io/en/latest/?badge=latest)
 
 **Note that this is an alpha release of the project, and large changes may occur, however it is intended to keep the access paths to functions and classes the same.**
 

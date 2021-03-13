@@ -1,5 +1,4 @@
-name: CI Workflow
-
+name: PyPI Publisher
 on:
   release:
     types: [published]
