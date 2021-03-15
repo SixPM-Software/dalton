@@ -27,11 +27,12 @@ class Atom:
         """
         self.endpoint = endpoint
 
-    def _query(self, endpoint: str, params={}):
+    def _query(self, endpoint: str, params=None):
         """Internal function to make a query and return data
 
         Args:
                 endpoint (str): Endpoint of query
+                params (dict): Dictionary of parameters for the query
 
         Returns:
                 data (dict): Request data
@@ -39,6 +40,8 @@ class Atom:
         Raises:
                 RequestFailedError: API success returned with False - likely invalid endpoint
         """
+        if params is None:
+            params = {}
         data = requests.get(endpoint, params=params)
         data = json.loads(data.content)
         if data["success"]:
