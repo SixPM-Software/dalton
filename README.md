@@ -27,10 +27,7 @@ This Python package provides a wrapper providing read-only access to the Atomic 
 * A growing collection of class methods for working with API data.
 
 ### In development
-* Support of Offers and Accounts.
-* Price history
-
-Fun fact: This package is named after John Dalton, a pioneer of Atomic Theory.
+Have a look at our roadmap [here](https://github.com/stuckatsixpm/dalton/projects/1).
 
 ## Installation
 
@@ -38,12 +35,13 @@ The recommended method of installation is through PyPI and pip
 ```
 python -m pip install daltonapi
 ```
+*Fun fact: This package is named after John Dalton, a pioneer of Atomic Theory.*
 
 ## Examples
 
 ### Creating an Atom object
 The main class of the Dalton package is the Atom class, which is used as an interface to the API
-``` python
+``` 
 >>> from daltonapi.api import Atom
 
 >>> atom = Atom()
