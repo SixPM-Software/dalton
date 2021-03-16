@@ -30,7 +30,7 @@ class AtomicBaseClass:
             "schema": Schema,
             "template": Template,
         }
-        if key in conversions:
+        if key in conversions and data is not None:
             data = conversions[key](data)
         return (key, data)
 
@@ -60,17 +60,20 @@ class Asset(AtomicBaseClass):
     def get_mint(self):
         """Method to obtain mint information of the asset
         if max supply (list[2]) returns 0, there is no maximum limit
+        
         Returns:
-                list[int,int,int]: [mint number, total in circulation, max supply]
+            tuple(int,int,int): [mint number, total in circulation, max supply]
         """
-        return [
+        if getattr(self,"issued_supply",None) is None:
+            return (0,0,0) # if no issued supply, likely this asset exists without template
+        return tuple([
             int(i)
             for i in [
                 self.template_mint,
                 self.template.issued_supply,
                 self.template.max_supply,
             ]
-        ]
+        ])
 
     def get_image(self):
         """Returns the primary image of the asset
@@ -85,14 +88,15 @@ class Asset(AtomicBaseClass):
         `Asset [Asset ID]: [Collection Name] - [Asset Name] #[Mint/Total Supply] (Max Supply: [Max Supply])`
 
         Returns:
-            [type]: [description]
+            str: String representation of the class
         """
         name = self.name
         asset_id = self.asset_id
         collection = self.collection.get_id()
-        mint = self.get_mint()
-        mint = "%s/%s (Max Supply: %s)" % tuple(mint)
-        return "Asset " + asset_id + ": " + collection + " - " + name + " #" + mint
+        mint = ""
+        if self.get_mint() != (0,0,0):
+            mint = " #%s/%s (Max Supply: %s)" % tuple(mint)
+        return "Asset " + asset_id + ": " + collection + " - " + name + mint
 
 
 class Collection(AtomicBaseClass):

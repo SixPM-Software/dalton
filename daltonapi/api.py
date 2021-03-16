@@ -65,7 +65,7 @@ class Atom:
         Returns:
                 Asset: Corresponding object
         """
-        assert type(asset_id) == str, "Asset ID should be passed as a strpr"
+        assert type(asset_id) == str, "Asset ID should be passed as a str"
         if not asset_id.isnumeric():
             raise AssetIDError(asset_id)
         data = self._query(self.endpoint + "assets/" + asset_id)
