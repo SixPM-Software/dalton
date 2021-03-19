@@ -22,11 +22,12 @@ This Python package provides a wrapper providing read-only access to the Atomic 
 
 ## Features
 
-* `Atom` class for accessing Atomic Asset Data
-* Pythonic classes for Atomic Assets, Templates, Schemas, Collections, Transfer events, with 
-* A growing collection of class methods for working with API data.
+*   `Atom` class for accessing Atomic Asset Data
+*   Pythonic classes for Atomic Assets, Templates, Schemas, Collections, Transfer events, with 
+*   A growing collection of class methods for working with API data.
 
 ### In development
+
 Have a look at our roadmap [here](https://github.com/stuckatsixpm/dalton/projects/1).
 
 ## Installation
@@ -40,6 +41,7 @@ python -m pip install daltonapi
 ## Examples
 
 ### Creating an Atom object
+
 The main class of the Dalton package is the Atom class, which is used as an interface to the API
 ``` 
 >>> from daltonapi.api import Atom
@@ -53,7 +55,7 @@ Once you have created an Atom, it's simple to get information about an asset.
 ``` 
 >>> my_asset = atom.get_asset("1099519242825")
 >>> print(my_asset)
-Asset 1099519242825: creekdrops21 - Bitcoin #1/21 (Max Supply: 21)
+Asset 1099519242825: creekdrops21 -   Bitcoin #1/21 (Max Supply: 21)
 >>>
 >>> # get link to asset's primary image
 >>> print(my_asset.get_image())
@@ -84,11 +86,10 @@ See [Contributing](CONTRIBUTING.md).
 Alternatively, if you would like to sponsor me, consider donating some WAX to the address `daltonpython`.
 ![https://i.imgur.com/rWbgGW3.png](https://i.imgur.com/rWbgGW3.png)
 
-
 ## Attribution
-* [WAX team](https://github.com/worldwide-asset-exchange) for development of the WAX blockchain.
-* [Pink.network](https://github.com/pinknetworkx) for development of atomic assets.
-* [PurpleBooth](https://gist.github.com/PurpleBooth) for Contributing Template.
+*   [WAX team](https://github.com/worldwide-asset-exchange) for development of the WAX blockchain.
+*   [Pink.network](https://github.com/pinknetworkx) for development of atomic assets.
+*   [PurpleBooth](https://gist.github.com/PurpleBooth) for Contributing Template.
 
 ## Contact me
-* Twitter: [@stuckat6pm](https://twitter.com/stuckat6pm)
+*   Twitter: [@stuckat6pm](https://twitter.com/stuckat6pm)
