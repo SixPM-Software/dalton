@@ -6,7 +6,6 @@
 
 This Python package provides a wrapper providing read-only access to the Atomic Assets API on the WAX blockchain. Full docs being assembled at [Read the Docs](https://dalton.readthedocs.io/en/latest/).
 
-
 - [Dalton](#dalton)
   - [Features](#features)
     - [In development](#in-development)
