@@ -9,11 +9,12 @@ class RequestFailedError(Exception):
 
 
 class AssetIDError(Exception):
-    """Exception called when Asset ID is invalid"""
+    """Exception called when Atomic ID is invalid"""
 
     def __init__(self, asset_id):
         self.message = (
-            "Asset ID %s is invalid. The asset ID must be an integer." % asset_id
+            "Atomic ID %s is invalid. The Atomic ID must be a string integer."
+            % asset_id
         )
 
     def __str__(self):

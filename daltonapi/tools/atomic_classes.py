@@ -150,6 +150,18 @@ class Asset(AtomicBaseClass):
         """
         return (self._updated_at_block, self._updated_at_time)
 
+    @property
+    def collection(self):
+        return self._collection
+
+    @property
+    def schema(self):
+        return self._schema
+
+    @property
+    def template(self):
+        return self._template
+
     def __str__(self):
         """Pretty prints basic asset information in format
         `Asset [Asset ID]: [Collection Name] - [Asset Name] #[Mint/Total Supply] (Max Supply: [Max Supply])`
@@ -214,6 +226,28 @@ class Template(AtomicBaseClass):
         """
         super().__init__(api_data)
         self.key = self._template_id
+
+    @property
+    def image(self):
+        """Returns the primary image of the asset
+
+        Returns:
+            str: direct link to the image
+        """
+        return "https://ipfs.io/ipfs/" + self._immutable_data["img"]
+
+    @property
+    def all_media(self):
+        """Returns a dict of all media properties of the asset
+
+        Returns:
+            dict: key:image_link pairs
+        """
+        return {
+            key: "https://ipfs.io/ipfs/" + val
+            for key, val in self._immutable_data.items()
+            if val.startswith("Qm")
+        }
 
 
 class Offer(AtomicBaseClass):

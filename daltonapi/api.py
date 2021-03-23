@@ -125,3 +125,62 @@ class Atom:
         data = self._query(self.endpoint + "transfers", params=params)
         data = [Transfer(t) for t in data]
         return data
+
+    def get_collection(self, collection_id: str):
+        """Gets an atomic collection by ID
+
+        Args:
+                collection_id (str): Collection ID
+
+        Raises:
+                AssetIDError: Raised when an incorrect template_id is passed
+
+        Returns:
+                Template: Corresponding object
+        """
+        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert len(collection_id) == 12, "Collection ID must be 12 characters"
+        data = self._query(self.endpoint + "collections/" + collection_id)
+        return Collection(data)
+
+    def get_template(self, collection_id: str, template_id: str):
+        """Gets an atomic template by ID
+
+        Args:
+                collection_id (str): Collection ID
+                template_id (str): Template ID
+
+        Raises:
+                AssetIDError: Raised when an incorrect template_id is passed
+
+        Returns:
+                Template: Corresponding object
+        """
+        assert type(template_id) == str, "Template ID should be passed as a str"
+        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert len(collection_id) == 12, "Collection ID must be 12 characters"
+        if not template_id.isnumeric():
+            raise AssetIDError(template_id)
+        data = self._query(
+            self.endpoint + "templates/" + collection_id + "/" + template_id
+        )
+        return Template(data)
+
+    def get_schema(self, collection_id: str, schema_id: str):
+        """Gets an atomic template by ID
+
+        Args:
+                collection_id (str): Collection ID
+                schema_id (str): Template ID
+
+        Raises:
+                AssetIDError: Raised when an incorrect schema_id is passed
+
+        Returns:
+                Template: Corresponding object
+        """
+        assert type(schema_id) == str, "Template ID should be passed as a str"
+        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert len(collection_id) == 12, "Collection ID must be 12 characters"
+        data = self._query(self.endpoint + "schemas/" + collection_id + "/" + schema_id)
+        return Schema(data)
