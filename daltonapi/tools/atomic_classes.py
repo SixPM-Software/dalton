@@ -13,7 +13,7 @@ class AtomicBaseClass:
         """
         for key in api_data:
             key, data = self._process_data(key, api_data[key])
-            setattr(self, key, data)
+            setattr(self, "_" + key, data)
         self.key = ""
 
     def _process_data(self, key: str, data: dict):
@@ -55,9 +55,28 @@ class Asset(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.asset_id
+        self.key = self._asset_id
 
-    def get_mint(self):
+    @property
+    def name(self):
+        """Returns the asset's name
+
+        Returns:
+            str: Asset name
+        """
+        return self._data["name"]
+
+    @property
+    def owner(self):
+        """Returns the Asset's owner
+
+        Returns:
+            str: Asset Owner
+        """
+        return self._owner
+
+    @property
+    def mint(self):
         """Method to obtain mint information of the asset
         if max supply (list[2]) returns 0, there is no maximum limit
 
@@ -74,20 +93,108 @@ class Asset(AtomicBaseClass):
             [
                 int(i)
                 for i in [
-                    self.template_mint,
-                    self.template.issued_supply,
-                    self.template.max_supply,
+                    self._template_mint,
+                    self._template.issued_supply,
+                    self._template.max_supply,
                 ]
             ]
         )
 
-    def get_image(self):
+    @property
+    def image(self):
         """Returns the primary image of the asset
 
         Returns:
             str: direct link to the image
         """
-        return "https://ipfs.io/ipfs/" + self.data["img"]
+        return "https://ipfs.io/ipfs/" + self._data["img"]
+
+    @property
+    def all_media(self):
+        """Returns a dict of all media properties of the asset
+
+        Returns:
+            dict: key:image_link pairs
+        """
+        return {
+            key: "https://ipfs.io/ipfs/" + val
+            for key, val in self._data.items()
+            if val.startswith("Qm")
+        }
+
+    @property
+    def burned(self):
+        """Burn information of the asset.
+        Returns (None,None,None) if unburned.
+
+        Returns:
+            tuple: (block, timestamp, account)
+        """
+        return (self._burned_at_block, self._burned_at_time, self._burned_by_account)
+
+    @property
+    def burnable(self):
+        """Is the asset burnable?
+
+        Returns:
+            bool
+        """
+        return self._is_burnable
+
+    @property
+    def transferable(self):
+        """Is the asset transferable?
+
+        Returns:
+            bool
+        """
+        return self._is_transferable
+
+    @property
+    def last_transferred(self):
+        """Information about the last transfer of the asset
+
+        Returns:
+            tuple: (block,timestamp)
+        """
+        return (self._transferred_at_block, self._transferred_at_time)
+
+    @property
+    def last_updated(self):
+        """Information about the last update to the asset
+
+        Returns:
+            tuple: (block,timestamp)
+        """
+        return (self._updated_at_block, self._updated_at_time)
+
+    @property
+    def collection(self):
+        """Returns the Asset's collection
+
+        Returns:
+            Collection: The collection of the Asset
+        """
+        return self._collection
+
+    @property
+    def schema(self):
+        """Returns the Asset's schema
+
+        Returns:
+            Schema: The schema of the Asset
+        """
+        return self._schema
+
+    @property
+    def template(self):
+        """Returns the Asset's template
+        Returns None if no template
+
+        Returns:
+            Template: The template of the Asset
+        """
+        return self._template
 
     def __str__(self):
         """Pretty prints basic asset information in format
@@ -97,10 +204,10 @@ class Asset(AtomicBaseClass):
             str: String representation of the class
         """
         name = self.name
-        asset_id = self.asset_id
-        collection = self.collection.get_id()
+        asset_id = self._asset_id
+        collection = self._collection.get_id()
         mint = ""
-        if self.get_mint() != (0, 0, 0):
+        if self.mint != (0, 0, 0):
             mint = " #%s/%s (Max Supply: %s)" % tuple(mint)
         return "Asset " + asset_id + ": " + collection + " - " + name + mint
 
@@ -115,17 +222,18 @@ class Collection(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.collection_name
+        self.key = self._collection_name
 
-    def get_image(self):
+    @property
+    def image(self):
         """Returns the primary image of the collection
 
         Returns:
             str: direct link to the image
         """
-        if self.img is None:
+        if self._img is None:
             raise NoCollectionImageError
-        return "https://ipfs.io/ipfs/" + self.img
+        return "https://ipfs.io/ipfs/" + self._img
 
 
 class Schema(AtomicBaseClass):
@@ -138,7 +246,7 @@ class Schema(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.schema_name
+        self.key = self._schema_name
 
 
 class Template(AtomicBaseClass):
@@ -151,11 +259,44 @@ class Template(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.template_id
+        self.key = self._template_id
+
+    @property
+    def image(self):
+        """Returns the primary image of the asset
+
+        Returns:
+            str: direct link to the image
+        """
+        return "https://ipfs.io/ipfs/" + self._immutable_data["img"]
+
+    @property
+    def all_media(self):
+        """Returns a dict of all media properties of the asset
+
+        Returns:
+            dict: key:image_link pairs
+        """
+        return {
+            key: "https://ipfs.io/ipfs/" + val
+            for key, val in self._immutable_data.items()
+            if val.startswith("Qm")
+        }
+
+    @property
+    def name(self):
+        """Returns template name
+
+        Returns:
+            str: Template name
+        """
+        return self._immutable_data["name"]
 
 
 class Offer(AtomicBaseClass):
-    """Class for instantizing Atomic Asset Offer Data"""
+    """Class for instantizing Atomic Asset Offer Data
+
+    More features coming soon"""
 
     def __init__(self, api_data):
         """Creates an Offer data object from API data
@@ -164,7 +305,7 @@ class Offer(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.offer_id
+        self.key = self._offer_id
 
 
 class Transfer(AtomicBaseClass):
@@ -177,7 +318,43 @@ class Transfer(AtomicBaseClass):
             api_data (dict): Data from the AtomicAssets API
         """
         super().__init__(api_data)
-        self.key = self.transfer_id
+        self.key = self._transfer_id
+
+    @property
+    def assets(self):
+        """Returns a list of assets transferred in the transfer
+
+        Returns:
+            List: List of Asset
+        """
+        return [Asset(nft) for nft in self._assets]
+
+    @property
+    def memo(self):
+        """Returns memo of transfer
+
+        Returns:
+            str: Memo text
+        """
+        return self._memo
+
+    @property
+    def contract(self):
+        """Returns contract type of transfer
+
+        Returns:
+            str: contract type
+        """
+        return self._contract
+
+    @property
+    def timestamp(self):
+        """Returns timestamp of transfer
+
+        Returns:
+            int: timestamp to millisecond precision
+        """
+        return int(self._created_at_time)
 
     def __str__(self):
         """Pretty prints Transfer information in the format
@@ -186,10 +363,10 @@ class Transfer(AtomicBaseClass):
         Args:
             api_data (dict): Data from the AtomicAssets API
         """
-        when = datetime.fromtimestamp(float(self.created_at_time) / 1000).isoformat()
-        sender = self.sender_name
-        to = self.recipient_name
-        return when + ": %s ---> %s" % (sender, to)
+        when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
+        sender = self._sender_name
+        to = self._recipient_name
+        return when + ": %s ---> %s : %s" % (sender, to, self.memo)
 
 
 class Account:
