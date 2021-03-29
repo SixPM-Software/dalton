@@ -1,4 +1,5 @@
 """Dalton API Wrapper for WAX
+
 This is the core module of the Dalton API wrapper, providing the Atom Class,
 which can be used to query the various API endpoints."""
 
@@ -18,6 +19,7 @@ from .tools.atomic_errors import AssetIDError, NoFiltersError, RequestFailedErro
 
 
 class Atom:
+
     """API Wrapper Class for AtomicAssets"""
 
     def __init__(self, endpoint="https://wax.api.atomicassets.io/atomicassets/v1/"):
@@ -118,7 +120,7 @@ class Atom:
         return []
 
     def get_asset_history(self, item: Asset):
-        """Fetches transfer history of an asset]
+        """Fetches transfer history of an asset
 
         Args:
             item (Asset): An Asset Object
@@ -126,7 +128,6 @@ class Atom:
         Returns:
             list: List of transfer objects (try acceesing with str(Transfer) for easy formatting)
         """
-
         params = {"asset_id": item.get_id()}
         data = self._query(self.endpoint + "transfers", params=params)
         data = [Transfer(t) for t in data]
