@@ -57,7 +57,7 @@ Once you have created an Atom, it's simple to get information about an asset.
 Asset 1099519242825: creekdrops21 -   Bitcoin #1/21 (Max Supply: 21)
 >>>
 >>> # get link to asset's primary image
->>> print(my_asset.get_image())
+>>> print(my_asset.image
 https://ipfs.io/ipfs/QmUn8kvvHFrJK2mSsiPFNRMmmehnRoNJsqTP4XTVsemgrc
 >>>
 >>> # get asset collection, which is a Collection object
