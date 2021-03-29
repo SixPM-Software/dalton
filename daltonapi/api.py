@@ -71,8 +71,7 @@ class Atom:
         Returns:
                 Asset: Corresponding object
         """
-        assert isinstance(asset_id, str), "Asset ID should be passed as a str"
-        if not asset_id.isnumeric():
+        if not isinstance(asset_id, str) or not asset_id.isnumeric():
             raise AtomicIDError(asset_id)
         data = self._query(self.endpoint + "assets/" + asset_id)
         return Asset(data)
