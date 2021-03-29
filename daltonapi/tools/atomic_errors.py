@@ -2,7 +2,6 @@
 
 Error Classes for the package"""
 
-
 class RequestFailedError(Exception):
     """Exception called when an API request fails"""
 
