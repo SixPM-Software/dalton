@@ -13,14 +13,14 @@ keywords = ["wax", "atomicassets", "api", "wrapper", "dalton", "nft"]
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
 black = "^20.8b1"
 pylint = "^2.7.2"
 Sphinx = "^3.5.2"
 sphinx-rtd-theme = "^0.5.1"
 sphinxcontrib-fulltoc = "^1.2.0"
-
-[tool.poetry.dev-dependencies]
-pytest = "^6.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
