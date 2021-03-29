@@ -184,3 +184,76 @@ class Atom:
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(self.endpoint + "schemas/" + collection_id + "/" + schema_id)
         return Schema(data)
+
+    def get_burned(
+        self,
+        owner: str = "",
+        collection: Collection = "",
+        schema: Schema = "",
+        template: Template = "",
+        limit=100,
+    ):
+        """Get a list of burned assets based on critera. Must have at least 1 criteria
+
+        Args:
+                owner (str, optional): account name. Defaults to "".
+                collection (str, Collection, optional): collection name. Defaults to "".
+                schema (str, Schema, optional): schema name. Defaults to "".
+                template (str, Template, optional): template ID. Defaults to "".
+                limit (int, optional): maximum number of results to return. Defaults to 100.
+
+        Raises:
+                NoFiltersError: Raised when no filters are passed
+
+        Returns:
+                list[Assets]: List of asset objects matching the criteria
+        """
+        fields = {
+            "owner": self._process_input(owner),
+            "collection_name": self._process_input(collection),
+            "schema_name": self._process_input(schema),
+            "template_id": self._process_input(template),
+        }
+        for key in list(fields.keys()):
+            if fields[key] == "":
+                del fields[key]
+        if not len(fields):
+            raise NoFiltersError
+        fields["limit"] = limit
+        fields["burned"] = True
+
+        data = self._query(self.endpoint + "assets", params=fields)
+        built_data = [Asset(nft) for nft in data]
+        return built_data
+
+    # def get_transfer(self):
+    #     pass
+
+    def get_transfers(
+        self,
+        sender:str="",
+        recipient:str="",
+        owner: str = "",
+        collection: Collection = "",
+        schema: Schema = "",
+        template: Template = "",
+        limit=100
+        ):
+        assert sender != "" and recipient != "", "Sender and recipient can't both be blank"
+        fields = {
+            "owner": self._process_input(owner),
+            "collection_name": self._process_input(collection),
+            "schema_name": self._process_input(schema),
+            "template_id": self._process_input(template),
+            "sender":sender,
+            "recipient":recipient
+        }
+        for key in list(fields.keys()):
+            if fields[key] == "":
+                del fields[key]
+        if not len(fields):
+            raise NoFiltersError
+        fields["limit"] = limit
+        data = self._query(self.endpoint + "transfers", params=fields)
+        built_data = [Transfer(t) for t in data]
+        return built_data

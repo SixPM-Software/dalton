@@ -58,6 +58,15 @@ class Asset(AtomicBaseClass):
         self.key = self._asset_id
 
     @property
+    def owner(self):
+        """Returns the Asset's owner
+
+        Returns:
+            str: Asset Owner
+        """
+        return self._owner
+
+    @property
     def mint(self):
         """Method to obtain mint information of the asset
         if max supply (list[2]) returns 0, there is no maximum limit
@@ -152,14 +161,30 @@ class Asset(AtomicBaseClass):
 
     @property
     def collection(self):
+        """Returns the Asset's collection
+
+        Returns:
+            Collection: The collection of the Asset
+        """        
         return self._collection
 
     @property
     def schema(self):
+        """Returns the Asset's schema
+
+        Returns:
+            Schema: The schema of the Asset
+        """ 
         return self._schema
 
     @property
     def template(self):
+        """Returns the Asset's template
+        Returns None if no template
+
+        Returns:
+            Template: The template of the Asset
+        """ 
         return self._template
 
     def __str__(self):
@@ -248,6 +273,10 @@ class Template(AtomicBaseClass):
             for key, val in self._immutable_data.items()
             if val.startswith("Qm")
         }
+
+    @property
+    def name(self):
+        return self._immutable_data["name"]
 
 
 class Offer(AtomicBaseClass):
