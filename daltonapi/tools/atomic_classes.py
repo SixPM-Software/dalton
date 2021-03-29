@@ -370,8 +370,8 @@ class Transfer(AtomicBaseClass):
         """
         when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
         sender = self._sender_name
-        to = self._recipient_name
-        return when + ": %s ---> %s : %s" % (sender, to, self.memo)
+        recipient = self._recipient_name
+        return when + ": %s ---> %s : %s" % (sender, recipient, self.memo)
 
 
 class Account:

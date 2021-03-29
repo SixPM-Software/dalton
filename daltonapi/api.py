@@ -1,4 +1,5 @@
 """Dalton API Wrapper for WAX
+
 This is the core module of the Dalton API wrapper, providing the Atom Class,
 which can be used to query the various API endpoints."""
 
@@ -14,10 +15,11 @@ from .tools.atomic_classes import (
     Transfer,
     AtomicBaseClass,
 )
-from .tools.atomic_errors import AssetIDError, NoFiltersError, RequestFailedError
+from .tools.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedError
 
 
 class Atom:
+
     """API Wrapper Class for AtomicAssets"""
 
     def __init__(self, endpoint="https://wax.api.atomicassets.io/atomicassets/v1/"):
@@ -64,14 +66,14 @@ class Atom:
                 asset_id (str): Asset ID
 
         Raises:
-                AssetIDError: Raised when an incorrect asset_id is passed
+                AtomicIDError: Raised when an incorrect asset_id is passed
 
         Returns:
                 Asset: Corresponding object
         """
         assert isinstance(asset_id, str), "Asset ID should be passed as a str"
         if not asset_id.isnumeric():
-            raise AssetIDError(asset_id)
+            raise AtomicIDError(asset_id)
         data = self._query(self.endpoint + "assets/" + asset_id)
         return Asset(data)
 
@@ -118,7 +120,7 @@ class Atom:
         return []
 
     def get_asset_history(self, item: Asset):
-        """Fetches transfer history of an asset]
+        """Fetches transfer history of an asset
 
         Args:
             item (Asset): An Asset Object
@@ -126,7 +128,6 @@ class Atom:
         Returns:
             list: List of transfer objects (try acceesing with str(Transfer) for easy formatting)
         """
-
         params = {"asset_id": item.get_id()}
         data = self._query(self.endpoint + "transfers", params=params)
         data = [Transfer(t) for t in data]
@@ -139,7 +140,7 @@ class Atom:
                 collection_id (str): Collection ID
 
         Raises:
-                AssetIDError: Raised when an incorrect template_id is passed
+                AtomicIDError: Raised when an incorrect template_id is passed
 
         Returns:
                 Template: Corresponding object
@@ -157,7 +158,7 @@ class Atom:
                 template_id (str): Template ID
 
         Raises:
-                AssetIDError: Raised when an incorrect template_id is passed
+                AtomicIDError: Raised when an incorrect template_id is passed
 
         Returns:
                 Template: Corresponding object
@@ -166,7 +167,7 @@ class Atom:
         assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         if not template_id.isnumeric():
-            raise AssetIDError(template_id)
+            raise AtomicIDError(template_id)
         data = self._query(
             self.endpoint + "templates/" + collection_id + "/" + template_id
         )
@@ -180,7 +181,7 @@ class Atom:
                 schema_id (str): Template ID
 
         Raises:
-                AssetIDError: Raised when an incorrect schema_id is passed
+                AtomicIDError: Raised when an incorrect schema_id is passed
 
         Returns:
                 Template: Corresponding object

@@ -13,7 +13,7 @@ class RequestFailedError(Exception):
         return self.message
 
 
-class AssetIDError(Exception):
+class AtomicIDError(Exception):
     """Exception called when Atomic ID is invalid"""
 
     def __init__(self, asset_id):
