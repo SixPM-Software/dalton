@@ -1,3 +1,7 @@
+"""Dalton API Wrapper for WAX
+This is the core module of the Dalton API wrapper, providing the Atom Class,
+which can be used to query the various API endpoints."""
+
 import json
 
 import requests
@@ -65,7 +69,7 @@ class Atom:
         Returns:
                 Asset: Corresponding object
         """
-        assert type(asset_id) == str, "Asset ID should be passed as a str"
+        assert isinstance(asset_id, str), "Asset ID should be passed as a str"
         if not asset_id.isnumeric():
             raise AssetIDError(asset_id)
         data = self._query(self.endpoint + "assets/" + asset_id)
@@ -92,7 +96,7 @@ class Atom:
                 NoFiltersError: Raised when no filters are passed
 
         Returns:
-                list[Assets]: List of asset objects matching the criteria
+                list[Assets]: List of Asset objects matching the criteria
         """
         fields = {
             "owner": self._process_input(owner),
@@ -108,8 +112,10 @@ class Atom:
         fields["limit"] = limit
 
         data = self._query(self.endpoint + "assets", params=fields)
-        built_data = [Asset(nft) for nft in data]
-        return built_data
+        if len(data):
+            built_data = [Asset(nft) for nft in data]
+            return built_data
+        return []
 
     def get_asset_history(self, item: Asset):
         """Fetches transfer history of an asset]
@@ -138,7 +144,7 @@ class Atom:
         Returns:
                 Template: Corresponding object
         """
-        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(self.endpoint + "collections/" + collection_id)
         return Collection(data)
@@ -156,8 +162,8 @@ class Atom:
         Returns:
                 Template: Corresponding object
         """
-        assert type(template_id) == str, "Template ID should be passed as a str"
-        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert isinstance(template_id, str), "Template ID should be passed as a str"
+        assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         if not template_id.isnumeric():
             raise AssetIDError(template_id)
@@ -179,8 +185,8 @@ class Atom:
         Returns:
                 Template: Corresponding object
         """
-        assert type(schema_id) == str, "Template ID should be passed as a str"
-        assert type(collection_id) == str, "Collection ID should be passed as a str"
+        assert isinstance(schema_id, str), "Template ID should be passed as a str"
+        assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(self.endpoint + "schemas/" + collection_id + "/" + schema_id)
         return Schema(data)
@@ -206,7 +212,7 @@ class Atom:
                 NoFiltersError: Raised when no filters are passed
 
         Returns:
-                list[Assets]: List of asset objects matching the criteria
+                list[Assets]: List of Asset objects matching the criteria
         """
         fields = {
             "owner": self._process_input(owner),
@@ -223,30 +229,48 @@ class Atom:
         fields["burned"] = True
 
         data = self._query(self.endpoint + "assets", params=fields)
-        built_data = [Asset(nft) for nft in data]
-        return built_data
+        if len(data):
+            built_data = [Asset(nft) for nft in data]
+            return built_data
+        return []
 
     # def get_transfer(self):
     #     pass
 
     def get_transfers(
         self,
-        sender:str="",
-        recipient:str="",
-        owner: str = "",
+        sender: str = "",
+        recipient: str = "",
         collection: Collection = "",
         schema: Schema = "",
         template: Template = "",
-        limit=100
-        ):
-        assert sender != "" and recipient != "", "Sender and recipient can't both be blank"
+        limit=100,
+    ):
+        """Search for transfers fulfilling a criteria
+
+        Args:
+            sender (str, optional): Sender address. Defaults to "".
+            recipient (str, optional): Recipient address. Defaults to "".
+            collection (str, Collection, optional): collection name. Defaults to "".
+            schema (str, Schema, optional): schema name. Defaults to "".
+            template (str, Template, optional): template ID. Defaults to "".
+            limit (int, optional): maximum number of results to return. Defaults to 100.
+
+        Raises:
+            NoFiltersError: Raised when no criteria provided
+
+        Returns:
+            list[Transfers]: List of Transfer objects matching the criteria
+        """
+        assert (
+            sender != "" or recipient != ""
+        ), "Sender and recipient can't both be blank"
         fields = {
-            "owner": self._process_input(owner),
             "collection_name": self._process_input(collection),
             "schema_name": self._process_input(schema),
             "template_id": self._process_input(template),
-            "sender":sender,
-            "recipient":recipient
+            "sender": sender,
+            "recipient": recipient,
         }
         for key in list(fields.keys()):
             if fields[key] == "":
@@ -255,5 +279,7 @@ class Atom:
             raise NoFiltersError
         fields["limit"] = limit
         data = self._query(self.endpoint + "transfers", params=fields)
-        built_data = [Transfer(t) for t in data]
-        return built_data
+        if len(data):
+            built_data = [Transfer(t) for t in data]
+            return built_data
+        return []

@@ -58,6 +58,15 @@ class Asset(AtomicBaseClass):
         self.key = self._asset_id
 
     @property
+    def name(self):
+        """Returns the asset's name
+
+        Returns:
+            str: Asset name
+        """
+        return self._data["name"]
+
+    @property
     def owner(self):
         """Returns the Asset's owner
 
@@ -165,7 +174,7 @@ class Asset(AtomicBaseClass):
 
         Returns:
             Collection: The collection of the Asset
-        """        
+        """
         return self._collection
 
     @property
@@ -174,7 +183,7 @@ class Asset(AtomicBaseClass):
 
         Returns:
             Schema: The schema of the Asset
-        """ 
+        """
         return self._schema
 
     @property
@@ -184,7 +193,7 @@ class Asset(AtomicBaseClass):
 
         Returns:
             Template: The template of the Asset
-        """ 
+        """
         return self._template
 
     def __str__(self):
@@ -194,7 +203,7 @@ class Asset(AtomicBaseClass):
         Returns:
             str: String representation of the class
         """
-        name = self._name
+        name = self.name
         asset_id = self._asset_id
         collection = self._collection.get_id()
         mint = ""
@@ -276,11 +285,18 @@ class Template(AtomicBaseClass):
 
     @property
     def name(self):
+        """Returns template name
+
+        Returns:
+            str: Template name
+        """
         return self._immutable_data["name"]
 
 
 class Offer(AtomicBaseClass):
-    """Class for instantizing Atomic Asset Offer Data"""
+    """Class for instantizing Atomic Asset Offer Data
+
+    More features coming soon"""
 
     def __init__(self, api_data):
         """Creates an Offer data object from API data
@@ -304,6 +320,42 @@ class Transfer(AtomicBaseClass):
         super().__init__(api_data)
         self.key = self._transfer_id
 
+    @property
+    def assets(self):
+        """Returns a list of assets transferred in the transfer
+
+        Returns:
+            List: List of Asset
+        """
+        return [Asset(nft) for nft in self._assets]
+
+    @property
+    def memo(self):
+        """Returns memo of transfer
+
+        Returns:
+            str: Memo text
+        """
+        return self._memo
+
+    @property
+    def contract(self):
+        """Returns contract type of transfer
+
+        Returns:
+            str: contract type
+        """
+        return self._contract
+
+    @property
+    def timestamp(self):
+        """Returns timestamp of transfer
+
+        Returns:
+            int: timestamp to millisecond precision
+        """
+        return int(self._created_at_time)
+
     def __str__(self):
         """Pretty prints Transfer information in the format
         `[DateAndTime]: [Sender] ---> [Recipient]`
@@ -314,7 +366,7 @@ class Transfer(AtomicBaseClass):
         when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
         sender = self._sender_name
         to = self._recipient_name
-        return when + ": %s ---> %s" % (sender, to)
+        return when + ": %s ---> %s : %s" % (sender, to, self.memo)
 
 
 class Account:
