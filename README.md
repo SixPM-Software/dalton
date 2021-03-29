@@ -1,5 +1,6 @@
 # Dalton
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3bf697b4325046609713d52d7d6845df)](https://app.codacy.com/gh/stuckatsixpm/dalton?utm_source=github.com&utm_medium=referral&utm_content=stuckatsixpm/dalton&utm_campaign=Badge_Grade_Settings)
 ![PyPI](https://img.shields.io/pypi/v/daltonapi) ![GitHub](https://img.shields.io/github/license/stuckatsixpm/dalton) [![CI Workflow](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml/badge.svg)](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml) [![Documentation Status](https://readthedocs.org/projects/dalton/badge/?version=latest)](https://dalton.readthedocs.io/en/latest/?badge=latest)
 
 **Note that this is an alpha release of the project, and large changes may occur, however it is intended to keep the access paths to functions and classes the same.**
