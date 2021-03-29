@@ -1,3 +1,8 @@
+"""Atomic Classes
+
+Classes for instantizing Atomic Asset data structures"""
+
+
 from datetime import datetime
 from .atomic_errors import NoCollectionImageError
 
