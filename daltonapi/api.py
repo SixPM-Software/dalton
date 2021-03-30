@@ -4,7 +4,7 @@ This is the core module of the Dalton API wrapper, providing the Atom Class,
 which can be used to query the various API endpoints."""
 
 import json
-from typing import List
+from typing import List, Union
 
 import requests
 
@@ -38,14 +38,14 @@ class Atom:
         """Internal function to make a query and return data
 
         Args:
-                endpoint (str): Endpoint of query
-                params (dict): Dictionary of parameters for the query
+            endpoint (str): Endpoint of query
+            params (dict): Dictionary of parameters for the query
 
         Returns:
-                data (dict): Request data
+            data (dict): Request data
 
         Raises:
-                RequestFailedError: API success returned with False - likely invalid endpoint
+            RequestFailedError: API success returned with False - likely invalid endpoint
         """
         if params is None:
             params = {}
@@ -64,13 +64,13 @@ class Atom:
         """Gets an atomic asset by ID
 
         Args:
-                asset_id (str): Asset ID
+            asset_id (str): Asset ID
 
         Raises:
-                AtomicIDError: Raised when an incorrect asset_id is passed
+            AtomicIDError: Raised when an incorrect asset_id is passed
 
         Returns:
-                Asset: Corresponding object
+            Asset: Corresponding object
         """
         if not isinstance(asset_id, str) or not asset_id.isnumeric():
             raise AtomicIDError(asset_id)
@@ -88,17 +88,17 @@ class Atom:
         """Get a list of assets based on critera. Must have at least 1 criteria
 
         Args:
-                owner (str, optional): account name. Defaults to "".
-                collection (str, Collection, optional): collection name. Defaults to "".
-                schema (str, Schema, optional): schema name. Defaults to "".
-                template (str, Template, optional): template ID. Defaults to "".
-                limit (int, optional): maximum number of results to return. Defaults to 100.
+            owner (str, optional): account name. Defaults to "".
+            collection (str, Collection, optional): collection name. Defaults to "".
+            schema (str, Schema, optional): schema name. Defaults to "".
+            template (str, Template, optional): template ID. Defaults to "".
+            limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
-                NoFiltersError: Raised when no filters are passed
+            NoFiltersError: Raised when no filters are passed
 
         Returns:
-                list[Assets]: List of Asset objects matching the criteria
+            list[Asset]: List of Asset objects matching the criteria
         """
         fields = {
             "owner": self._process_input(owner),
@@ -116,16 +116,20 @@ class Atom:
         data = self._query(f"{self.endpoint}assets", params=fields)
         return [Asset(nft) for nft in data]
 
-    def get_asset_history(self, item: Asset) -> List[Transfer]:
+    def get_asset_history(self, item: Union[Asset, str]) -> List[Transfer]:
         """Fetches transfer history of an asset
 
         Args:
-            item (Asset): An Asset Object
+            item (Union[Asset, str]): An Asset Object or a string with the asset id
 
         Returns:
-            list: List of transfer objects (try acceesing with str(Transfer) for easy formatting)
+            list[Transfer]: List of transfer objects
         """
-        params = {"asset_id": item.get_id()}
+        if isinstance(item, str) and not item.isnumeric():
+            raise AtomicIDError(item)
+        if isinstance(item, Asset):
+            item = item.get_id()
+        params = {"asset_id": item}
         data = self._query(f"{self.endpoint}transfers", params=params)
         data = [Transfer(t) for t in data]
         return data
@@ -134,56 +138,65 @@ class Atom:
         """Gets an atomic collection by ID
 
         Args:
-                collection_id (str): Collection ID
+            collection_id (str): Collection ID
 
         Raises:
-                AtomicIDError: Raised when an incorrect template_id is passed
+            AtomicIDError: Raised when an incorrect template_id is passed
 
         Returns:
-                Template: Corresponding object
+            Template: Corresponding object
         """
         assert isinstance(collection_id, str), "Collection ID should be passed as a str"
-        assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(f"{self.endpoint}collections/{collection_id}")
         return Collection(data)
 
-    def get_template(self, collection_id: str, template_id: str) -> Template:
+    def get_template(
+        self, collection_id: Union[Collection, str], template_id: str
+    ) -> Template:
         """Gets an atomic template by ID
 
         Args:
-                collection_id (str): Collection ID
-                template_id (str): Template ID
+            collection_id (Union[Collection, str]): Collection ID
+            template_id (str): Template ID
 
         Raises:
-                AtomicIDError: Raised when an incorrect template_id is passed
+            AtomicIDError: Raised when an incorrect template_id is passed
 
         Returns:
-                Template: Corresponding object
+            Template: Corresponding object
         """
         assert isinstance(template_id, str), "Template ID should be passed as a str"
-        assert isinstance(collection_id, str), "Collection ID should be passed as a str"
-        assert len(collection_id) == 12, "Collection ID must be 12 characters"
+        assert isinstance(
+            collection_id, (str, Collection)
+        ), "Collection ID should be passed as a str or a Collection object"
+        if isinstance(collection_id, Collection):
+            collection_id = collection_id.get_id()
         if not template_id.isnumeric():
             raise AtomicIDError(template_id)
+
         data = self._query(f"{self.endpoint}templates/{collection_id}/{template_id}")
         return Template(data)
 
-    def get_schema(self, collection_id: str, schema_id: str) -> Schema:
+    def get_schema(self, collection_id: Union[Collection, str], schema_id: str) -> Schema:
         """Gets an atomic template by ID
 
         Args:
-                collection_id (str): Collection ID
-                schema_id (str): Template ID
+            collection_id (Union[Collection, str]): Collection ID
+            schema_id (str): Schema ID
 
         Raises:
-                AtomicIDError: Raised when an incorrect schema_id is passed
+            AtomicIDError: Raised when an incorrect schema_id is passed
 
         Returns:
-                Template: Corresponding object
+            Schema: Corresponding object
         """
-        assert isinstance(schema_id, str), "Template ID should be passed as a str"
-        assert isinstance(collection_id, str), "Collection ID should be passed as a str"
-        assert len(collection_id) == 12, "Collection ID must be 12 characters"
+        assert isinstance(schema_id, str), "Schema ID should be passed as a str"
+        assert isinstance(
+            collection_id, (str, Collection)
+        ), "Collection ID should be passed as a str or a Collection object"
+        if isinstance(collection_id, Collection):
+            collection_id = collection_id.get_id()
+
         data = self._query(f"{self.endpoint}schemas/{collection_id}/{schema_id}")
         return Schema(data)
 
@@ -198,17 +211,17 @@ class Atom:
         """Get a list of burned assets based on critera. Must have at least 1 criteria
 
         Args:
-                owner (str, optional): account name. Defaults to "".
-                collection (str, Collection, optional): collection name. Defaults to "".
-                schema (str, Schema, optional): schema name. Defaults to "".
-                template (str, Template, optional): template ID. Defaults to "".
-                limit (int, optional): maximum number of results to return. Defaults to 100.
+            owner (str, optional): account name. Defaults to "".
+            collection (str, Collection, optional): collection name. Defaults to "".
+            schema (str, Schema, optional): schema name. Defaults to "".
+            template (str, Template, optional): template ID. Defaults to "".
+            limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
-                NoFiltersError: Raised when no filters are passed
+            NoFiltersError: Raised when no filters are passed
 
         Returns:
-                list[Assets]: List of Asset objects matching the criteria
+            list[Assets]: List of Asset objects matching the criteria
         """
         fields = {
             "owner": self._process_input(owner),
