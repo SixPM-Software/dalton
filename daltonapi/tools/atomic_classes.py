@@ -43,7 +43,6 @@ class AtomicBaseClass:
         """Returns the primary atomic assets identifier of the object
         E.g. For an asset, returns asset id. For a schema, returns schema name
 
-
         Returns:
             str: id
         """

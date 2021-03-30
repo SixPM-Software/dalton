@@ -20,7 +20,6 @@ from .tools.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedErr
 
 
 class Atom:
-
     """API Wrapper Class for AtomicAssets"""
 
     def __init__(self, endpoint="https://wax.api.atomicassets.io/atomicassets/v1/"):
@@ -28,9 +27,6 @@ class Atom:
 
         Args:
             endpoint (str, optional): Sets API endpoint. Defaults to AtomicAssets hosted API.
-
-        Returns:
-            None
         """
         self.endpoint = endpoint
 
@@ -177,7 +173,9 @@ class Atom:
         data = self._query(f"{self.endpoint}templates/{collection_id}/{template_id}")
         return Template(data)
 
-    def get_schema(self, collection_id: Union[Collection, str], schema_id: str) -> Schema:
+    def get_schema(
+        self, collection_id: Union[Collection, str], schema_id: str
+    ) -> Schema:
         """Gets an atomic template by ID
 
         Args:
@@ -221,7 +219,7 @@ class Atom:
             NoFiltersError: Raised when no filters are passed
 
         Returns:
-            list[Assets]: List of Asset objects matching the criteria
+            list[Asset]: List of Asset objects matching the criteria
         """
         fields = {
             "owner": self._process_input(owner),
@@ -266,7 +264,7 @@ class Atom:
             NoFiltersError: Raised when no criteria provided
 
         Returns:
-            list[Transfers]: List of Transfer objects matching the criteria
+            list[Transfer]: List of Transfer objects matching the criteria
         """
         assert (
             sender != "" or recipient != ""
