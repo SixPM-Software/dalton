@@ -112,7 +112,7 @@ class Asset(AtomicBaseClass):
         Returns:
             str: direct link to the image
         """
-        return "https://ipfs.io/ipfs/" + self._data["img"]
+        return f"https://ipfs.io/ipfs/{self._data['img']}"
 
     @property
     def all_media(self):
@@ -122,7 +122,7 @@ class Asset(AtomicBaseClass):
             dict: key:image_link pairs
         """
         return {
-            key: "https://ipfs.io/ipfs/" + val
+            key: f"https://ipfs.io/ipfs/{val}"
             for key, val in self._data.items()
             if val.startswith("Qm")
         }
@@ -213,8 +213,8 @@ class Asset(AtomicBaseClass):
         collection = self._collection.get_id()
         mint = ""
         if self.mint != (0, 0, 0):
-            mint = " #%s/%s (Max Supply: %s)" % tuple(mint)
-        return "Asset " + asset_id + ": " + collection + " - " + name + mint
+            mint = " #%s/%s (Max Supply: %s)" % self.mint
+        return f"Asset {asset_id}:  {collection} - {name} {mint}"
 
 
 class Collection(AtomicBaseClass):
@@ -238,7 +238,7 @@ class Collection(AtomicBaseClass):
         """
         if self._img is None:
             raise NoCollectionImageError
-        return "https://ipfs.io/ipfs/" + self._img
+        return f"https://ipfs.io/ipfs/{self._img}"
 
 
 class Schema(AtomicBaseClass):
@@ -273,7 +273,7 @@ class Template(AtomicBaseClass):
         Returns:
             str: direct link to the image
         """
-        return "https://ipfs.io/ipfs/" + self._immutable_data["img"]
+        return f"https://ipfs.io/ipfs/{self._immutable_data['img']}"
 
     @property
     def all_media(self):
@@ -283,7 +283,7 @@ class Template(AtomicBaseClass):
             dict: key:image_link pairs
         """
         return {
-            key: "https://ipfs.io/ipfs/" + val
+            key: f"https://ipfs.io/ipfs/{val}"
             for key, val in self._immutable_data.items()
             if val.startswith("Qm")
         }
@@ -370,8 +370,8 @@ class Transfer(AtomicBaseClass):
         """
         when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
         sender = self._sender_name
-        to = self._recipient_name
-        return when + ": %s ---> %s : %s" % (sender, to, self.memo)
+        recipient = self._recipient_name
+        return  f"{when}: {sender} ---> {recipient} : {self.memo}"
 
 
 class Account:
