@@ -114,10 +114,7 @@ class Atom:
         fields["limit"] = limit
 
         data = self._query(f"{self.endpoint}assets", params=fields)
-        if len(data):
-            built_data = [Asset(nft) for nft in data]
-            return built_data
-        return []
+        return [Asset(nft) for nft in data]
 
     def get_asset_history(self, item: Asset) -> List[Transfer]:
         """Fetches transfer history of an asset
@@ -228,10 +225,7 @@ class Atom:
         fields["burned"] = True
 
         data = self._query(f"{self.endpoint}/assets", params=fields)
-        if len(data):
-            built_data = [Asset(nft) for nft in data]
-            return built_data
-        return []
+        return [Asset(nft) for nft in data]
 
     # def get_transfer(self):
     #     pass
@@ -278,7 +272,4 @@ class Atom:
             raise NoFiltersError
         fields["limit"] = limit
         data = self._query(f"{self.endpoint}transfers", params=fields)
-        if len(data):
-            built_data = [Transfer(t) for t in data]
-            return built_data
-        return []
+        return [Transfer(t) for t in data]
