@@ -281,8 +281,6 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if len(fields) == 0:
-            raise NoFiltersError
         fields["limit"] = limit
         data = self._query(f"{self.endpoint}transfers", params=fields)
         return [Transfer(t) for t in data]
