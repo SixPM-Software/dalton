@@ -2,6 +2,7 @@
 
 Error Classes for the package"""
 
+
 class RequestFailedError(Exception):
     """Exception called when an API request fails"""
 
@@ -19,8 +20,7 @@ class AtomicIDError(Exception):
     def __init__(self, asset_id):
         super().__init__(self)
         self.message = (
-            "Atomic ID %s is invalid. The Atomic ID must be a string integer."
-            % asset_id
+            f"Atomic ID {asset_id} is invalid. The Atomic ID must be a string integer."
         )
 
     def __str__(self):

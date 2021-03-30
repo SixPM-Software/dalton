@@ -71,10 +71,9 @@ class Atom:
         Returns:
                 Asset: Corresponding object
         """
-        assert isinstance(asset_id, str), "Asset ID should be passed as a str"
-        if not asset_id.isnumeric():
+        if not isinstance(asset_id, str) or not asset_id.isnumeric():
             raise AtomicIDError(asset_id)
-        data = self._query(self.endpoint + "assets/" + asset_id)
+        data = self._query(f"{self.endpoint}assets/{asset_id}")
         return Asset(data)
 
     def get_assets(
@@ -109,11 +108,11 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
 
-        data = self._query(self.endpoint + "assets", params=fields)
+        data = self._query(f"{self.endpoint}assets", params=fields)
         if len(data):
             built_data = [Asset(nft) for nft in data]
             return built_data
@@ -129,7 +128,7 @@ class Atom:
             list: List of transfer objects (try acceesing with str(Transfer) for easy formatting)
         """
         params = {"asset_id": item.get_id()}
-        data = self._query(self.endpoint + "transfers", params=params)
+        data = self._query(f"{self.endpoint}transfers", params=params)
         data = [Transfer(t) for t in data]
         return data
 
@@ -147,7 +146,7 @@ class Atom:
         """
         assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
-        data = self._query(self.endpoint + "collections/" + collection_id)
+        data = self._query(f"{self.endpoint}collections/{collection_id}")
         return Collection(data)
 
     def get_template(self, collection_id: str, template_id: str):
@@ -168,9 +167,7 @@ class Atom:
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         if not template_id.isnumeric():
             raise AtomicIDError(template_id)
-        data = self._query(
-            self.endpoint + "templates/" + collection_id + "/" + template_id
-        )
+        data = self._query(f"{self.endpoint}templates/{collection_id}/{template_id}")
         return Template(data)
 
     def get_schema(self, collection_id: str, schema_id: str):
@@ -189,7 +186,7 @@ class Atom:
         assert isinstance(schema_id, str), "Template ID should be passed as a str"
         assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
-        data = self._query(self.endpoint + "schemas/" + collection_id + "/" + schema_id)
+        data = self._query(f"{self.endpoint}schemas/{collection_id}/{schema_id}")
         return Schema(data)
 
     def get_burned(
@@ -224,12 +221,12 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
         fields["burned"] = True
 
-        data = self._query(self.endpoint + "assets", params=fields)
+        data = self._query(f"{self.endpoint}/assets", params=fields)
         if len(data):
             built_data = [Asset(nft) for nft in data]
             return built_data
@@ -276,10 +273,10 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
-        data = self._query(self.endpoint + "transfers", params=fields)
+        data = self._query(f"{self.endpoint}transfers", params=fields)
         if len(data):
             built_data = [Transfer(t) for t in data]
             return built_data
