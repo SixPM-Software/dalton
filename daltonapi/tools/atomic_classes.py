@@ -49,6 +49,12 @@ class AtomicBaseClass:
         """
         return self.key
 
+    def __eq__(self, other):
+        return self.key == other.key
+
+    def __ne__(self, other):
+        return not self == other
+
     def __repr__(self):
         return f"{self.__class__.__name__}({self.key})"
 
