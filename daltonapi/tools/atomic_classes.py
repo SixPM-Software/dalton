@@ -372,9 +372,3 @@ class Transfer(AtomicBaseClass):
         sender = self._sender_name
         recipient = self._recipient_name
         return  f"{when}: {sender} ---> {recipient} : {self.memo}"
-
-
-class Account:
-    """Coming soon!"""
-
-    pass

@@ -17,12 +17,13 @@ from .tools.atomic_classes import (
 )
 from .tools.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedError
 
+from .tools.wax_classes import Account
 
 class Atom:
 
     """API Wrapper Class for AtomicAssets"""
 
-    def __init__(self, endpoint="https://wax.api.atomicassets.io/atomicassets/v1/"):
+    def __init__(self, endpoint:str=""):
         """Creates an Atom object for accessing the AtomicAssets API
 
         Args:
@@ -31,7 +32,10 @@ class Atom:
         Returns:
             None
         """
-        self.endpoint = endpoint
+        if endpoint:
+            self.endpoint = endpoint
+        else:
+            self.endpoint = "https://wax.api.atomicassets.io/atomicassets/v1/"
 
     def _query(self, endpoint: str, params=None):
         """Internal function to make a query and return data
@@ -281,3 +285,49 @@ class Atom:
             built_data = [Transfer(t) for t in data]
             return built_data
         return []
+
+class Wax():
+    """Class for the WAX API
+    """
+    def __init__(self,endpoint: str=""):
+        if endpoint:
+            self.endpoint = endpoint
+        else:
+            self.endpoint = "https://api.waxsweden.org/"
+
+    def _query(self, endpoint: str, method: str= "POST", data=None):
+        """Internal function to make a query and return data
+
+        Args:
+                endpoint (str): Endpoint of query
+                data (dict): Dictionary of parameters for the query
+
+        Returns:
+                data (dict): Request data
+
+        Raises:
+                RequestFailedError: API success returned with False - likely invalid endpoint
+        """
+        if data is None:
+            data = {}
+        request_data = requests.request(method,endpoint, json=data)
+        print(request_data)
+        print(request_data.url)
+        print(request_data.text)
+        json_data = json.loads(request_data.content)
+        if request_data.status_code == 200:
+            return json_data
+        raise RequestFailedError
+
+    def get_account(self, account_name:str):
+        """[summary]
+
+        Args:
+            account_name (str): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        data = {"account_name":account_name}
+        account = self._query(f"{self.endpoint}v1/chain/get_account",data=data)
+        return Account(account)
