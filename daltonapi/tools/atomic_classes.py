@@ -49,6 +49,9 @@ class AtomicBaseClass:
         """
         return self.key
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.key})"
+
 
 class Asset(AtomicBaseClass):
     """Class for instantizing Atomic Assets"""
@@ -371,7 +374,7 @@ class Transfer(AtomicBaseClass):
         when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
         sender = self._sender_name
         recipient = self._recipient_name
-        return  f"{when}: {sender} ---> {recipient} : {self.memo}"
+        return f"{when}: {sender} ---> {recipient} : {self.memo}"
 
 
 class Account:
