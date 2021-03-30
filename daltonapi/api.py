@@ -108,7 +108,7 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
 
@@ -221,7 +221,7 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
         fields["burned"] = True
@@ -273,7 +273,7 @@ class Atom:
         for key in list(fields.keys()):
             if fields[key] == "":
                 del fields[key]
-        if not len(fields):
+        if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
         data = self._query(f"{self.endpoint}transfers", params=fields)
