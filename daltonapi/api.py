@@ -4,6 +4,7 @@ This is the core module of the Dalton API wrapper, providing the Atom Class,
 which can be used to query the various API endpoints."""
 
 import json
+from typing import List
 
 import requests
 
@@ -33,7 +34,7 @@ class Atom:
         """
         self.endpoint = endpoint
 
-    def _query(self, endpoint: str, params=None):
+    def _query(self, endpoint: str, params=None) -> dict:
         """Internal function to make a query and return data
 
         Args:
@@ -54,12 +55,12 @@ class Atom:
             return data["data"]
         raise RequestFailedError
 
-    def _process_input(self, field):
+    def _process_input(self, field) -> str:
         if field.__class__.__bases__[0] == AtomicBaseClass:
             field = field.get_id()
         return field
 
-    def get_asset(self, asset_id: str):
+    def get_asset(self, asset_id: str) -> Asset:
         """Gets an atomic asset by ID
 
         Args:
@@ -83,7 +84,7 @@ class Atom:
         schema: Schema = "",
         template: Template = "",
         limit=100,
-    ):
+    ) -> List[Asset]:
         """Get a list of assets based on critera. Must have at least 1 criteria
 
         Args:
@@ -118,7 +119,7 @@ class Atom:
             return built_data
         return []
 
-    def get_asset_history(self, item: Asset):
+    def get_asset_history(self, item: Asset) -> List[Transfer]:
         """Fetches transfer history of an asset
 
         Args:
@@ -132,7 +133,7 @@ class Atom:
         data = [Transfer(t) for t in data]
         return data
 
-    def get_collection(self, collection_id: str):
+    def get_collection(self, collection_id: str) -> Collection:
         """Gets an atomic collection by ID
 
         Args:
@@ -149,7 +150,7 @@ class Atom:
         data = self._query(f"{self.endpoint}collections/{collection_id}")
         return Collection(data)
 
-    def get_template(self, collection_id: str, template_id: str):
+    def get_template(self, collection_id: str, template_id: str) -> Template:
         """Gets an atomic template by ID
 
         Args:
@@ -170,7 +171,7 @@ class Atom:
         data = self._query(f"{self.endpoint}templates/{collection_id}/{template_id}")
         return Template(data)
 
-    def get_schema(self, collection_id: str, schema_id: str):
+    def get_schema(self, collection_id: str, schema_id: str) -> Schema:
         """Gets an atomic template by ID
 
         Args:
@@ -196,7 +197,7 @@ class Atom:
         schema: Schema = "",
         template: Template = "",
         limit=100,
-    ):
+    ) -> List[Asset]:
         """Get a list of burned assets based on critera. Must have at least 1 criteria
 
         Args:
@@ -243,7 +244,7 @@ class Atom:
         schema: Schema = "",
         template: Template = "",
         limit=100,
-    ):
+    ) -> List[Transfer]:
         """Search for transfers fulfilling a criteria
 
         Args:
