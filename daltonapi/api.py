@@ -311,9 +311,6 @@ class Wax():
         if data is None:
             data = {}
         request_data = requests.request(method,endpoint, json=data)
-        print(request_data)
-        print(request_data.url)
-        print(request_data.text)
         json_data = json.loads(request_data.content)
         if request_data.status_code == 200:
             return json_data
@@ -331,3 +328,80 @@ class Wax():
         data = {"account_name":account_name}
         account = self._query(f"{self.endpoint}v1/chain/get_account",data=data)
         return Account(account)
+
+class WaxTable():
+    """Class for WAX Tables"
+    """
+    def __init__(self,contract:str,table:str,endpoint: str=""):
+        self.contract=contract
+        self.table = table
+        if endpoint:
+            self.endpoint = endpoint
+        else:
+            self.endpoint = "https://api.waxsweden.org/v1/chain/get_table_rows"
+
+    def _query(self, endpoint: str, method: str= "POST", data=None):
+        """Internal function to make a query and return data
+
+        Args:
+                endpoint (str): Endpoint of query
+                data (dict): Dictionary of parameters for the query
+
+        Returns:
+                data (dict): Request data
+
+        Raises:
+                RequestFailedError: API success returned with False - likely invalid endpoint
+        """
+        if data is None:
+            data = {}
+        request_data = requests.request(method,endpoint, json=data)
+        json_data = json.loads(request_data.content)
+        if request_data.status_code == 200:
+            return json_data
+        raise RequestFailedError
+
+    def get_table_row(self,scope:str,key:str):
+        data = {
+            "code":self.contract,
+            "table":self.table,
+            "scope":scope,
+            "upper_bound":key,
+            "lower_bound":key,
+            "json":True
+        }
+        request_data = requests.post(self.endpoint,json=data)
+        json_data = json.loads(request_data.content)
+        if request_data.status_code == 200:
+            row = json_data["rows"]
+            if row:
+                return row[0]
+            return None
+        raise RequestFailedError
+
+    def get_table_rows(self,scope:str,search_params:dict,start_at:int=1):
+        data = {
+            "code":self.contract,
+            "table":self.table,
+            "scope":scope,
+            "json":True,
+            "limit":1000
+        }
+        hits = []
+        next_key = start_at
+        while True:
+            data["lower_bound"] = next_key
+            request_data = requests.post(self.endpoint,json=data)
+            json_data = json.loads(request_data.content)
+            if request_data.status_code == 200:
+                rows = json_data["rows"]
+                for row in rows:
+                    if all(row[key] == val for key,val in search_params.items()):
+                        hits.append(row)
+                        continue
+                if json_data["more"]:
+                    next_key = json_data["next_key"]
+                    continue
+                break
+            raise RequestFailedError
+        return hits
