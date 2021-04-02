@@ -362,6 +362,18 @@ class WaxTable():
         raise RequestFailedError
 
     def get_table_row(self,scope:str,key:str):
+        """Returns a table row using a scope and key
+
+        Args:
+            scope (str): [description]
+            key (str): [description]
+
+        Raises:
+            RequestFailedError: When Request status code not 200
+
+        Returns:
+            dict: [description]
+        """
         data = {
             "code":self.contract,
             "table":self.table,
@@ -380,6 +392,20 @@ class WaxTable():
         raise RequestFailedError
 
     def get_table_rows(self,scope:str,search_params:dict,start_at:int=1):
+        """Returns a list of table rows matching search criteria. This can be a
+        very slow process for large tables.
+
+        Args:
+            scope (str): Scope of table rows
+            search_params (dict): Dict of column_name:value pairs
+            start_at (int, optional): Row to start searching at. Defaults to 1.
+
+        Raises:
+            RequestFailedError: When Request status code not 200
+
+        Returns:
+            list: list of dict
+        """
         data = {
             "code":self.contract,
             "table":self.table,
