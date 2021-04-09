@@ -2,7 +2,7 @@
 
 Classes for instantizing Atomic Asset data structures"""
 
-
+from typing import Dict, List, Tuple
 from datetime import datetime
 from .atomic_errors import NoCollectionImageError
 
@@ -21,14 +21,14 @@ class AtomicBaseClass:
             setattr(self, "_" + key, data)
         self.key = ""
 
-    def _process_data(self, key: str, data: dict):
+    def _process_data(self, key: str, data: dict) -> Tuple[str, "AtomicBaseClass"]:
         """function to intercept and construct classes
 
         Args:
-                key (str): key to the dict
+            key (str): key to the dict
 
         Returns:
-                dict or class object
+            dict or class object
         """
         conversions = {
             "collection": Collection,
@@ -39,15 +39,23 @@ class AtomicBaseClass:
             data = conversions[key](data)
         return (key, data)
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Returns the primary atomic assets identifier of the object
         E.g. For an asset, returns asset id. For a schema, returns schema name
 
-
         Returns:
-                str: id
+            str: id
         """
         return self.key
+
+    def __eq__(self, other):
+        return self.key == other.key
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.key})"
 
 
 class Asset(AtomicBaseClass):
@@ -63,7 +71,7 @@ class Asset(AtomicBaseClass):
         self.key = self._asset_id
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Returns the asset's name
 
         Returns:
@@ -72,7 +80,7 @@ class Asset(AtomicBaseClass):
         return self._data["name"]
 
     @property
-    def owner(self):
+    def owner(self) -> str:
         """Returns the Asset's owner
 
         Returns:
@@ -81,7 +89,7 @@ class Asset(AtomicBaseClass):
         return self._owner
 
     @property
-    def mint(self):
+    def mint(self) -> Tuple[int, int, int]:
         """Method to obtain mint information of the asset
         if max supply (list[2]) returns 0, there is no maximum limit
 
@@ -106,7 +114,7 @@ class Asset(AtomicBaseClass):
         )
 
     @property
-    def image(self):
+    def image(self) -> str:
         """Returns the primary image of the asset
 
         Returns:
@@ -115,7 +123,7 @@ class Asset(AtomicBaseClass):
         return f"https://ipfs.io/ipfs/{self._data['img']}"
 
     @property
-    def all_media(self):
+    def all_media(self) -> Dict[str, str]:
         """Returns a dict of all media properties of the asset
 
         Returns:
@@ -128,7 +136,7 @@ class Asset(AtomicBaseClass):
         }
 
     @property
-    def burned(self):
+    def burned(self) -> Tuple[str, str, str]:
         """Burn information of the asset.
         Returns (None,None,None) if unburned.
 
@@ -138,7 +146,7 @@ class Asset(AtomicBaseClass):
         return (self._burned_at_block, self._burned_at_time, self._burned_by_account)
 
     @property
-    def burnable(self):
+    def burnable(self) -> bool:
         """Is the asset burnable?
 
         Returns:
@@ -147,7 +155,7 @@ class Asset(AtomicBaseClass):
         return self._is_burnable
 
     @property
-    def transferable(self):
+    def transferable(self) -> bool:
         """Is the asset transferable?
 
         Returns:
@@ -156,7 +164,7 @@ class Asset(AtomicBaseClass):
         return self._is_transferable
 
     @property
-    def last_transferred(self):
+    def last_transferred(self) -> Tuple[str, str]:
         """Information about the last transfer of the asset
 
         Returns:
@@ -165,7 +173,7 @@ class Asset(AtomicBaseClass):
         return (self._transferred_at_block, self._transferred_at_time)
 
     @property
-    def last_updated(self):
+    def last_updated(self) -> Tuple[str, str]:
         """Information about the last update to the asset
 
         Returns:
@@ -174,7 +182,7 @@ class Asset(AtomicBaseClass):
         return (self._updated_at_block, self._updated_at_time)
 
     @property
-    def collection(self):
+    def collection(self) -> "Collection":
         """Returns the Asset's collection
 
         Returns:
@@ -183,7 +191,7 @@ class Asset(AtomicBaseClass):
         return self._collection
 
     @property
-    def schema(self):
+    def schema(self) -> "Schema":
         """Returns the Asset's schema
 
         Returns:
@@ -192,7 +200,7 @@ class Asset(AtomicBaseClass):
         return self._schema
 
     @property
-    def template(self):
+    def template(self) -> "Template":
         """Returns the Asset's template
         Returns None if no template
 
@@ -230,7 +238,7 @@ class Collection(AtomicBaseClass):
         self.key = self._collection_name
 
     @property
-    def image(self):
+    def image(self) -> str:
         """Returns the primary image of the collection
 
         Returns:
@@ -267,7 +275,7 @@ class Template(AtomicBaseClass):
         self.key = self._template_id
 
     @property
-    def image(self):
+    def image(self) -> str:
         """Returns the primary image of the asset
 
         Returns:
@@ -276,7 +284,7 @@ class Template(AtomicBaseClass):
         return f"https://ipfs.io/ipfs/{self._immutable_data['img']}"
 
     @property
-    def all_media(self):
+    def all_media(self) -> Dict[str, str]:
         """Returns a dict of all media properties of the asset
 
         Returns:
@@ -289,7 +297,7 @@ class Template(AtomicBaseClass):
         }
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Returns template name
 
         Returns:
@@ -326,7 +334,7 @@ class Transfer(AtomicBaseClass):
         self.key = self._transfer_id
 
     @property
-    def assets(self):
+    def assets(self) -> List["Asset"]:
         """Returns a list of assets transferred in the transfer
 
         Returns:
@@ -335,7 +343,7 @@ class Transfer(AtomicBaseClass):
         return [Asset(nft) for nft in self._assets]
 
     @property
-    def memo(self):
+    def memo(self) -> str:
         """Returns memo of transfer
 
         Returns:
@@ -344,7 +352,7 @@ class Transfer(AtomicBaseClass):
         return self._memo
 
     @property
-    def contract(self):
+    def contract(self) -> str:
         """Returns contract type of transfer
 
         Returns:
@@ -353,7 +361,7 @@ class Transfer(AtomicBaseClass):
         return self._contract
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> int:
         """Returns timestamp of transfer
 
         Returns:
@@ -371,7 +379,7 @@ class Transfer(AtomicBaseClass):
         when = datetime.fromtimestamp(float(self._created_at_time) / 1000).isoformat()
         sender = self._sender_name
         recipient = self._recipient_name
-        return  f"{when}: {sender} ---> {recipient} : {self.memo}"
+        return f"{when}: {sender} ---> {recipient} : {self.memo}"
 
 
 class Account:
