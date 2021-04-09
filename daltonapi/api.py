@@ -429,7 +429,7 @@ class WaxTable():
             return None
         raise RequestFailedError
 
-    def get_table_rows(self,scope:str,search_params:dict,start_at:int=1):
+    def get_table_rows(self,scope:str,search_params:dict,start_at:int=1,limit:int=1000):
         """Returns a list of table rows matching search criteria. This can be a
         very slow process for large tables.
 
@@ -449,7 +449,7 @@ class WaxTable():
             "table":self.table,
             "scope":scope,
             "json":True,
-            "limit":1000
+            "limit":limit
         }
         hits = []
         next_key = start_at
