@@ -136,7 +136,7 @@ class Atom:
         data = [Transfer(t) for t in data]
         return data
 
-    def get_collection(self, collection_id: str):
+    def get_collection(self, collection_id: str,verbose:bool=False):
         """Gets an atomic collection by ID
 
         Args:
@@ -151,6 +151,8 @@ class Atom:
         assert isinstance(collection_id, str), "Collection ID should be passed as a str"
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(f"{self.endpoint}collections/{collection_id}")
+        if verbose:
+            print(data)
         return Collection(data)
 
     def get_template(self, collection_id: str, template_id: str):
@@ -192,6 +194,42 @@ class Atom:
         assert len(collection_id) == 12, "Collection ID must be 12 characters"
         data = self._query(f"{self.endpoint}schemas/{collection_id}/{schema_id}")
         return Schema(data)
+
+    def get_holders(
+        self,
+        collection: Collection = "",
+        schema: Schema = "",
+        template: Template = "",
+        limit:int=100
+    ):
+        """Returns a list of accouts holding some entity (collection, schema, template)
+
+        Args:
+            collection (str, Collection, optional): collection name. Defaults to "".
+            schema (str, Schema, optional): schema name. Defaults to "".
+            template (str, Template, optional): template ID. Defaults to "".
+            limit (int, optional): maximum number of results to return. Defaults to 100.
+
+        Raises:
+            NoFiltersError: Raised when no filters are passed
+
+        Returns:
+            list[dict]: List of dicts containing account names and number
+            of matching assets held.
+        """    
+        fields = {
+            "collection_name": self._process_input(collection),
+            "schema_name": self._process_input(schema),
+            "template_id": self._process_input(template),
+        }
+        for key in list(fields.keys()):
+            if fields[key] == "":
+                del fields[key]
+        if len(fields) == 0:
+            raise NoFiltersError
+        fields["limit"] = limit
+        data = self._query(f"{self.endpoint}accounts", params=fields)
+        return data
 
     def get_burned(
         self,
