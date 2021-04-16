@@ -107,9 +107,9 @@ class Asset(AtomicBaseClass):
             [
                 int(i)
                 for i in [
-                    self.template._template_mint,
-                    self.template._template.issued_supply,
-                    self.template._template.max_supply,
+                    self._template_mint,
+                    self.template._issued_supply,
+                    self.template._max_supply,
                 ]
             ]
         )

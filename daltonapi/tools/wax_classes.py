@@ -3,7 +3,6 @@
 Uses other endpoints for more information
 """
 
-
 class WaxBaseClass:
     """Template class for WAX API data"""
 
