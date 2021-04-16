@@ -255,8 +255,10 @@ class TestAtom:
             assert result_class == result_str
 
         def test_get_transfers_template(self, atom: Atom, template: Template):
+            
+            print(template.get_id())
             result_class = atom.get_transfers(
-                sender=account, template=template.get_id(), limit=5
+                sender=account, template=template, limit=5
             )
             assert isinstance(result_class, list)
             assert len(result_class) > 0
@@ -288,10 +290,9 @@ class TestAtom:
                 )
 
         def test_get_transfers_not_found(self, atom: Atom):
-            with pytest.raises(RequestFailedError):
-                result = atom.get_transfers(sender="/", recipient="/")
-                assert isinstance(result, list)
-                assert len(result) == 0
+            result = atom.get_transfers(sender="/", recipient="/")
+            assert isinstance(result, list)
+            assert len(result) == 0
 
         def test_get_transfers_invalid_request(self, atom: Atom):
             with pytest.raises(RequestFailedError):
