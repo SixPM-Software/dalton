@@ -256,7 +256,7 @@ class TestAtom:
 
         def test_get_transfers_template(self, atom: Atom, template: Template):
             result_class = atom.get_transfers(
-                sender=account, template=template, limit=5
+                sender=account, template=template.get_id(), limit=5
             )
             assert isinstance(result_class, list)
             assert len(result_class) > 0
