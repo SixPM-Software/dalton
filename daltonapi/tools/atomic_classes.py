@@ -96,6 +96,7 @@ class Asset(AtomicBaseClass):
         Returns:
             tuple(int,int,int): [mint number, total in circulation, max supply]
         """
+
         if getattr(self.template, "_issued_supply", None) is None:
             return (
                 0,
