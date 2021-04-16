@@ -49,10 +49,11 @@ class Atom:
         """
         if params is None:
             params = {}
-        data = requests.get(endpoint, params=params)
-        data = json.loads(data.content)
+        r = requests.get(endpoint, params=params)
+        data = json.loads(r.content)
         if data["success"]:
             return data["data"]
+        print(r.status_code)
         raise RequestFailedError
 
     def _process_input(self, field) -> str:
