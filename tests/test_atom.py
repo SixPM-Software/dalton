@@ -288,9 +288,10 @@ class TestAtom:
                 )
 
         def test_get_transfers_not_found(self, atom: Atom):
-            result = atom.get_transfers(sender="/", recipient="/")
-            assert isinstance(result, list)
-            assert len(result) == 0
+            with pytest.raises(RequestFailedError):
+                result = atom.get_transfers(sender="/", recipient="/")
+                assert isinstance(result, list)
+                assert len(result) == 0
 
         def test_get_transfers_invalid_request(self, atom: Atom):
             with pytest.raises(RequestFailedError):
