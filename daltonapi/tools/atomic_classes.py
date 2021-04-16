@@ -96,7 +96,8 @@ class Asset(AtomicBaseClass):
         Returns:
             tuple(int,int,int): [mint number, total in circulation, max supply]
         """
-        if getattr(self, "_issued_supply", None) is None:
+
+        if getattr(self.template, "_issued_supply", None) is None:
             return (
                 0,
                 0,
@@ -106,9 +107,9 @@ class Asset(AtomicBaseClass):
             [
                 int(i)
                 for i in [
-                    self._template_mint,
-                    self._template.issued_supply,
-                    self._template.max_supply,
+                    self.template._template_mint,
+                    self.template._template.issued_supply,
+                    self.template._template.max_supply,
                 ]
             ]
         )
