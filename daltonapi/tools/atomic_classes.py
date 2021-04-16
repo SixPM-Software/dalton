@@ -96,7 +96,7 @@ class Asset(AtomicBaseClass):
         Returns:
             tuple(int,int,int): [mint number, total in circulation, max supply]
         """
-        if getattr(self, "issued_supply", None) is None:
+        if getattr(self, "_issued_supply", None) is None:
             return (
                 0,
                 0,
@@ -380,9 +380,3 @@ class Transfer(AtomicBaseClass):
         sender = self._sender_name
         recipient = self._recipient_name
         return f"{when}: {sender} ---> {recipient} : {self.memo}"
-
-
-class Account:
-    """Coming soon!"""
-
-    pass

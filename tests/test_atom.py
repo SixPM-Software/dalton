@@ -7,6 +7,7 @@ from daltonapi.tools.atomic_errors import (
     RequestFailedError,
     NoFiltersError,
 )
+import time
 
 default_endpoint = "https://wax.api.atomicassets.io/atomicassets/v1/"
 account = "atomicmarket"
@@ -109,6 +110,11 @@ class TestAtom:
             with pytest.raises(RequestFailedError):
                 atom.get_assets(template="failed")
 
+    class TestTakeABreather():
+        #resets api rate limits
+        def test_free_rest(self):
+            time.sleep(60)
+
     class TestAtomGetAssetHistory:
         def test_get_asset_history(self, atom: Atom, asset: Asset):
             result_class = atom.get_asset_history(asset)
@@ -147,12 +153,16 @@ class TestAtom:
                 atom.get_collection("not valid id")
 
     class TestAtomGetTemplate:
-        def test_get_template(self, atom: Atom, collection: Collection, template: Template):
+        def test_get_template(
+            self, atom: Atom, collection: Collection, template: Template
+        ):
             result_template_class = atom.get_template(collection, template.get_id())
             assert isinstance(result_template_class, Template)
             assert result_template_class == template
 
-            result_template_str = atom.get_template(collection.get_id(), template.get_id())
+            result_template_str = atom.get_template(
+                collection.get_id(), template.get_id()
+            )
             assert isinstance(result_template_str, Template)
             assert result_template_str == template
 
@@ -193,7 +203,9 @@ class TestAtom:
             with pytest.raises(AssertionError):
                 atom.get_schema(123, 123)
 
-        def test_get_schema_not_found(self, atom: Atom, collection: Collection, schema: Schema):
+        def test_get_schema_not_found(
+            self, atom: Atom, collection: Collection, schema: Schema
+        ):
             with pytest.raises(RequestFailedError):
                 atom.get_schema("invalid collection id", "invalid schema id")
 
@@ -217,7 +229,9 @@ class TestAtom:
             assert isinstance(result[0], Transfer)
 
         def test_get_transfers_collection(self, atom: Atom, collection: Collection):
-            result_class = atom.get_transfers(sender=account, collection=collection, limit=5)
+            result_class = atom.get_transfers(
+                sender=account, collection=collection, limit=5
+            )
             assert isinstance(result_class, list)
             assert len(result_class) > 0
             assert isinstance(result_class[0], Transfer)
@@ -237,7 +251,9 @@ class TestAtom:
             assert len(result_class) > 0
             assert isinstance(result_class[0], Transfer)
 
-            result_str = atom.get_transfers(sender=account, schema=schema.get_id(), limit=5)
+            result_str = atom.get_transfers(
+                sender=account, schema=schema.get_id(), limit=5
+            )
             assert isinstance(result_str, list)
             assert len(result_str) > 0
             assert isinstance(result_str[0], Transfer)
@@ -245,7 +261,11 @@ class TestAtom:
             assert result_class == result_str
 
         def test_get_transfers_template(self, atom: Atom, template: Template):
-            result_class = atom.get_transfers(sender=account, template=template, limit=5)
+            
+            print(template.get_id())
+            result_class = atom.get_transfers(
+                sender=account, template=template, limit=5
+            )
             assert isinstance(result_class, list)
             assert len(result_class) > 0
             assert isinstance(result_class[0], Transfer)
@@ -271,7 +291,9 @@ class TestAtom:
                 atom.get_transfers()
 
             with pytest.raises(AssertionError):
-                atom.get_transfers(collection="missing", schema="sender and", template="recipient")
+                atom.get_transfers(
+                    collection="missing", schema="sender and", template="recipient"
+                )
 
         def test_get_transfers_not_found(self, atom: Atom):
             result = atom.get_transfers(sender="/", recipient="/")
