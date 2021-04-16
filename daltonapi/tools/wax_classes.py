@@ -12,7 +12,7 @@ class WaxBaseClass:
         Args:
             api_data (dict): Data from the WAX API
         """
-        for key,val in api_data.items():
+        for key, val in api_data.items():
             # key, data = self._process_data(key, api_data[key])
             setattr(self, "_" + key, val)
         self.key = ""
@@ -45,10 +45,11 @@ class WaxBaseClass:
         """
         return self.key
 
+
 class Account(WaxBaseClass):
-    """Class for WAX accounts
-    """
-    def __init__(self,api_data:dict):
+    """Class for WAX accounts"""
+
+    def __init__(self, api_data: dict):
         super().__init__(api_data)
         self.key = self._account_name
 
@@ -72,7 +73,7 @@ class Account(WaxBaseClass):
         resources = self._total_resources
         net = float(resources["net_weight"].rstrip(" WAX"))
         cpu = float(resources["cpu_weight"].rstrip(" WAX"))
-        return {"cpu":cpu,"net":net}
+        return {"cpu": cpu, "net": net}
 
     @property
     def total_balance(self):
