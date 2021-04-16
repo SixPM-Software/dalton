@@ -134,11 +134,7 @@ class Atom:
         data = [Transfer(t) for t in data]
         return data
 
-<<<<<<< HEAD
-    def get_collection(self, collection_id: str,verbose:bool=False):
-=======
     def get_collection(self, collection_id: str,verbose:bool=False) -> Collection:
->>>>>>> master
         """Gets an atomic collection by ID
 
         Args:
@@ -229,11 +225,7 @@ class Atom:
         Returns:
             list[dict]: List of dicts containing account names and number
             of matching assets held.
-<<<<<<< HEAD
         """    
-=======
-        """
->>>>>>> master
         fields = {
             "collection_name": self._process_input(collection),
             "schema_name": self._process_input(schema),
