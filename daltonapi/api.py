@@ -53,7 +53,6 @@ class Atom:
         data = json.loads(r.content)
         if data["success"]:
             return data["data"]
-        print(r.status_code)
         raise RequestFailedError
 
     def _process_input(self, field) -> str:

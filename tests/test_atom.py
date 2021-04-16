@@ -7,6 +7,7 @@ from daltonapi.tools.atomic_errors import (
     RequestFailedError,
     NoFiltersError,
 )
+import time
 
 default_endpoint = "https://wax.api.atomicassets.io/atomicassets/v1/"
 account = "atomicmarket"
@@ -108,6 +109,11 @@ class TestAtom:
         def test_get_assets_invalid_request(self, atom: Atom):
             with pytest.raises(RequestFailedError):
                 atom.get_assets(template="failed")
+
+    class TestTakeABreather():
+        #resets api rate limits
+        def test_free_rest(self):
+            time.sleep(60)
 
     class TestAtomGetAssetHistory:
         def test_get_asset_history(self, atom: Atom, asset: Asset):
