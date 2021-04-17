@@ -20,10 +20,11 @@ from .tools.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedErr
 
 from .tools.wax_classes import Account
 
+
 class Atom:
     """API Wrapper Class for AtomicAssets"""
 
-    def __init__(self, endpoint:str=""):
+    def __init__(self, endpoint: str = ""):
         """Creates an Atom object for accessing the AtomicAssets API
 
         Args:
@@ -84,6 +85,7 @@ class Atom:
         schema: Schema = "",
         template: Template = "",
         limit=100,
+        page: int = 1,
     ) -> List[Asset]:
         """Get a list of assets based on critera. Must have at least 1 criteria
 
@@ -112,11 +114,13 @@ class Atom:
         if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
-
+        fields["page"] = page
         data = self._query(f"{self.endpoint}assets", params=fields)
         return [Asset(nft) for nft in data]
 
-    def get_asset_history(self, item: Union[Asset, str]) -> List[Transfer]:
+    def get_asset_history(
+        self, item: Union[Asset, str], page: int = 1
+    ) -> List[Transfer]:
         """Fetches transfer history of an asset
 
         Args:
@@ -129,12 +133,12 @@ class Atom:
             raise AtomicIDError(item)
         if isinstance(item, Asset):
             item = item.get_id()
-        params = {"asset_id": item}
+        params = {"asset_id": item, "page": page}
         data = self._query(f"{self.endpoint}transfers", params=params)
         data = [Transfer(t) for t in data]
         return data
 
-    def get_collection(self, collection_id: str,verbose:bool=False) -> Collection:
+    def get_collection(self, collection_id: str, verbose: bool = False) -> Collection:
         """Gets an atomic collection by ID
 
         Args:
@@ -209,7 +213,8 @@ class Atom:
         collection: Collection = "",
         schema: Schema = "",
         template: Template = "",
-        limit:int=100
+        limit: int = 100,
+        page: int = 1,
     ):
         """Returns a list of accouts holding some entity (collection, schema, template)
 
@@ -237,6 +242,7 @@ class Atom:
         if len(fields) == 0:
             raise NoFiltersError
         fields["limit"] = limit
+        fields["page"] = page
         data = self._query(f"{self.endpoint}accounts", params=fields)
         return data
 
@@ -290,6 +296,7 @@ class Atom:
         collection: Collection = "",
         schema: Schema = "",
         template: Template = "",
+        page: int = 1,
         limit=100,
     ) -> List[Transfer]:
         """Search for transfers fulfilling a criteria
@@ -300,6 +307,7 @@ class Atom:
             collection (str, Collection, optional): collection name. Defaults to "".
             schema (str, Schema, optional): schema name. Defaults to "".
             template (str, Template, optional): template ID. Defaults to "".
+            page (int, optional): start page. Defaults to 1
             limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
@@ -317,6 +325,7 @@ class Atom:
             "template_id": self._process_input(template),
             "sender": sender,
             "recipient": recipient,
+            "page": page,
         }
         for key in list(fields.keys()):
             if fields[key] == "":
@@ -328,16 +337,17 @@ class Atom:
             return built_data
         return []
 
-class Wax():
-    """Class for the WAX API
-    """
-    def __init__(self,endpoint: str=""):
+
+class Wax:
+    """Class for the WAX API"""
+
+    def __init__(self, endpoint: str = ""):
         if endpoint:
             self.endpoint = endpoint
         else:
             self.endpoint = "https://api.waxsweden.org/"
 
-    def _query(self, endpoint: str, method: str= "POST", data=None):
+    def _query(self, endpoint: str, method: str = "POST", data=None):
         """Internal function to make a query and return data
 
         Args:
@@ -352,13 +362,13 @@ class Wax():
         """
         if data is None:
             data = {}
-        request_data = requests.request(method,endpoint, json=data)
+        request_data = requests.request(method, endpoint, json=data)
         json_data = json.loads(request_data.content)
         if request_data.status_code == 200:
             return json_data
         raise RequestFailedError
 
-    def get_account(self, account_name:str):
+    def get_account(self, account_name: str):
         """[summary]
 
         Args:
@@ -367,22 +377,23 @@ class Wax():
         Returns:
             [type]: [description]
         """
-        data = {"account_name":account_name}
-        account = self._query(f"{self.endpoint}v1/chain/get_account",data=data)
+        data = {"account_name": account_name}
+        account = self._query(f"{self.endpoint}v1/chain/get_account", data=data)
         return Account(account)
 
-class WaxTable():
-    """Class for WAX Tables"
-    """
-    def __init__(self,contract:str,table:str,endpoint: str=""):
-        self.contract=contract
+
+class WaxTable:
+    """Class for WAX Tables" """
+
+    def __init__(self, contract: str, table: str, endpoint: str = ""):
+        self.contract = contract
         self.table = table
         if endpoint:
             self.endpoint = endpoint
         else:
             self.endpoint = "https://api.waxsweden.org/v1/chain/get_table_rows"
 
-    def _query(self, endpoint: str, method: str= "POST", data=None):
+    def _query(self, endpoint: str, method: str = "POST", data=None):
         """Internal function to make a query and return data
 
         Args:
@@ -397,13 +408,13 @@ class WaxTable():
         """
         if data is None:
             data = {}
-        request_data = requests.request(method,endpoint, json=data)
+        request_data = requests.request(method, endpoint, json=data)
         json_data = json.loads(request_data.content)
         if request_data.status_code == 200:
             return json_data
         raise RequestFailedError
 
-    def get_table_row(self,scope:str,key:str):
+    def get_table_row(self, scope: str, key: str):
         """Returns a table row using a scope and key
 
         Args:
@@ -417,14 +428,14 @@ class WaxTable():
             dict: [description]
         """
         data = {
-            "code":self.contract,
-            "table":self.table,
-            "scope":scope,
-            "upper_bound":key,
-            "lower_bound":key,
-            "json":True
+            "code": self.contract,
+            "table": self.table,
+            "scope": scope,
+            "upper_bound": key,
+            "lower_bound": key,
+            "json": True,
         }
-        request_data = requests.post(self.endpoint,json=data)
+        request_data = requests.post(self.endpoint, json=data)
         json_data = json.loads(request_data.content)
         if request_data.status_code == 200:
             row = json_data["rows"]
@@ -433,7 +444,9 @@ class WaxTable():
             return None
         raise RequestFailedError
 
-    def get_table_rows(self,scope:str,search_params:dict,start_at:int=1,limit:int=1000):
+    def get_table_rows(
+        self, scope: str, search_params: dict, start_at: int = 1, limit: int = 1000
+    ):
         """Returns a list of table rows matching search criteria. This can be a
         very slow process for large tables.
 
@@ -449,22 +462,22 @@ class WaxTable():
             list: list of dict
         """
         data = {
-            "code":self.contract,
-            "table":self.table,
-            "scope":scope,
-            "json":True,
-            "limit":limit
+            "code": self.contract,
+            "table": self.table,
+            "scope": scope,
+            "json": True,
+            "limit": limit,
         }
         hits = []
         next_key = start_at
         while True:
             data["lower_bound"] = next_key
-            request_data = requests.post(self.endpoint,json=data)
+            request_data = requests.post(self.endpoint, json=data)
             json_data = json.loads(request_data.content)
             if request_data.status_code == 200:
                 rows = json_data["rows"]
                 for row in rows:
-                    if all(row[key] == val for key,val in search_params.items()):
+                    if all(row[key] == val for key, val in search_params.items()):
                         hits.append(row)
                         continue
                 if json_data["more"]:

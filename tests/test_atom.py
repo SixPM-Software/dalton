@@ -110,8 +110,8 @@ class TestAtom:
             with pytest.raises(RequestFailedError):
                 atom.get_assets(template="failed")
 
-    class TestTakeABreather():
-        #resets api rate limits
+    class TestTakeABreather:
+        # resets api rate limits
         def test_free_rest(self):
             time.sleep(60)
 
@@ -261,7 +261,7 @@ class TestAtom:
             assert result_class == result_str
 
         def test_get_transfers_template(self, atom: Atom, template: Template):
-            
+
             print(template.get_id())
             result_class = atom.get_transfers(
                 sender=account, template=template, limit=5
