@@ -27,7 +27,6 @@ copyright = "2021, stuckatsixpm"
 author = "stuckatsixpm"
 
 # The full version, including alpha/beta/rc tags
-
 release = "0.4.3"
 
 
