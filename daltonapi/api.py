@@ -84,6 +84,8 @@ class Atom:
         collection: Collection = "",
         schema: Schema = "",
         template: Template = "",
+        page: int = 1,
+        order: str = "desc",
         limit=100,
         page: int = 1,
     ) -> List[Asset]:
@@ -94,6 +96,8 @@ class Atom:
             collection (str, Collection, optional): collection name. Defaults to "".
             schema (str, Schema, optional): schema name. Defaults to "".
             template (str, Template, optional): template ID. Defaults to "".
+            page (int, optional): start page. Defaults to 1
+            order (str, optional): ordering. (asc/desc) - Defaults to "desc"
             limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
@@ -115,6 +119,7 @@ class Atom:
             raise NoFiltersError
         fields["limit"] = limit
         fields["page"] = page
+        fields["order"] = order
         data = self._query(f"{self.endpoint}assets", params=fields)
         return [Asset(nft) for nft in data]
 
@@ -213,8 +218,9 @@ class Atom:
         collection: Collection = "",
         schema: Schema = "",
         template: Template = "",
-        limit: int = 100,
         page: int = 1,
+        order: str = "desc",
+        limit: int = 100,
     ):
         """Returns a list of accouts holding some entity (collection, schema, template)
 
@@ -222,6 +228,8 @@ class Atom:
             collection (str, Collection, optional): collection name. Defaults to "".
             schema (str, Schema, optional): schema name. Defaults to "".
             template (str, Template, optional): template ID. Defaults to "".
+            page (int, optional): start page. Defaults to 1
+            order (str, optional): ordering. (asc/desc) - Defaults to "desc"
             limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
@@ -243,6 +251,7 @@ class Atom:
             raise NoFiltersError
         fields["limit"] = limit
         fields["page"] = page
+        fields["order"] = order
         data = self._query(f"{self.endpoint}accounts", params=fields)
         return data
 
@@ -297,6 +306,7 @@ class Atom:
         schema: Schema = "",
         template: Template = "",
         page: int = 1,
+        order: str = "desc",
         limit=100,
     ) -> List[Transfer]:
         """Search for transfers fulfilling a criteria
@@ -308,6 +318,7 @@ class Atom:
             schema (str, Schema, optional): schema name. Defaults to "".
             template (str, Template, optional): template ID. Defaults to "".
             page (int, optional): start page. Defaults to 1
+            order (str, optional): ordering. (asc/desc) - Defaults to "desc"
             limit (int, optional): maximum number of results to return. Defaults to 100.
 
         Raises:
@@ -331,6 +342,8 @@ class Atom:
             if fields[key] == "":
                 del fields[key]
         fields["limit"] = limit
+        fields["page"] = page
+        fields["order"] = order
         data = self._query(f"{self.endpoint}transfers", params=fields)
         if data:
             built_data = [Transfer(t) for t in data]
