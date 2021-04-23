@@ -87,7 +87,6 @@ class Atom:
         page: int = 1,
         order: str = "desc",
         limit=100,
-        page: int = 1,
     ) -> List[Asset]:
         """Get a list of assets based on critera. Must have at least 1 criteria
 
