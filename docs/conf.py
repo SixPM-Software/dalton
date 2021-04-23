@@ -30,7 +30,6 @@ author = "stuckatsixpm"
 
 release = "0.5.0"
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be

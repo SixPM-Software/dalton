@@ -237,7 +237,7 @@ class Atom:
         Returns:
             list[dict]: List of dicts containing account names and number
             of matching assets held.
-        """
+        """    
         fields = {
             "collection_name": self._process_input(collection),
             "schema_name": self._process_input(schema),
