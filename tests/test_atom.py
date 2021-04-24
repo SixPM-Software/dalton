@@ -182,9 +182,6 @@ class TestAtom:
                 atom.get_template("invalid collection id", "0")
 
             with pytest.raises(RequestFailedError):
-                atom.get_template("invalid collection id", template.get_id())
-
-            with pytest.raises(RequestFailedError):
                 atom.get_template(collection.get_id(), "0")
 
     class TestAtomGetSchema:
