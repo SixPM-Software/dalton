@@ -11,8 +11,9 @@ documentation = "https://dalton.readthedocs.io/en/latest/"
 keywords = ["wax", "atomicassets", "api", "wrapper", "dalton", "nft"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 requests = "^2.25.1"
+pydantic = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
@@ -21,6 +22,8 @@ pylint = "^2.7.4"
 Sphinx = "^4.0.0"
 sphinx-rtd-theme = "^0.5.2"
 sphinxcontrib-fulltoc = "^1.2.0"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

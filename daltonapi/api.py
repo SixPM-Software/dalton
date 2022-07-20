@@ -8,7 +8,7 @@ from typing import List, Union
 
 import requests
 
-from .tools.atomic_classes import (
+from .atomic.atomic_classes import (
     Asset,
     Schema,
     Template,
@@ -16,9 +16,9 @@ from .tools.atomic_classes import (
     Transfer,
     AtomicBaseClass,
 )
-from .tools.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedError
+from .atomic.atomic_errors import AtomicIDError, NoFiltersError, RequestFailedError
 
-from .tools.wax_classes import Account
+from .wax.wax_classes import Account
 
 
 class Atom:
