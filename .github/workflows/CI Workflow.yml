@@ -58,23 +58,23 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: |
-        pytest tests
+        poetry run pytest tests
 
-  install:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, "3.10.5"]
-    needs: lint
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Attempt to install
-      run: |
-        pip install dalton
+  # install:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: [3.8, 3.9, "3.10.5"]
+  #   needs: lint
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
+  #   - name: Attempt to install
+  #     run: |
+  #       pip install dalton
       
   build:
     runs-on: ubuntu-latest
