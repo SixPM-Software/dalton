@@ -1,5 +1,7 @@
 # Dalton
 
+### Rewrite Branch - **PYTHON 3.8+ AND UNSTABLE**
+
 ![PyPI](https://img.shields.io/pypi/v/daltonapi) ![GitHub](https://img.shields.io/github/license/stuckatsixpm/dalton) [![Documentation Status](https://readthedocs.org/projects/dalton/badge/?version=latest)](https://dalton.readthedocs.io/en/latest/?badge=latest) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06863e11a0f04b20bc45cbb920c9f3de)](https://www.codacy.com/gh/stuckatsixpm/dalton/dashboard?utm_source=github.com&utm_medium=referral&utm_content=stuckatsixpm/dalton&utm_campaign=Badge_Grade) [![CI Workflow](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml/badge.svg)](https://github.com/stuckatsixpm/dalton/actions/workflows/CI%20Workflow.yml)
 
 **Note that this is an alpha release of the project, and large changes may occur, however it is intended to keep the access paths to functions and classes the same.**
