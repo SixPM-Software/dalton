@@ -18,7 +18,7 @@ requests = "^2.25.1"
 pytest = "^6.2"
 black = "^21.8b0"
 pylint = "^2.7.4"
-Sphinx = "^4.0.0"
+Sphinx = "^5.2.1"
 sphinx-rtd-theme = "^0.5.2"
 sphinxcontrib-fulltoc = "^1.2.0"
 
